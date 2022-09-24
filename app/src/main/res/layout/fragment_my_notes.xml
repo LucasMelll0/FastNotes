@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/beige"
+    tools:context=".ui.fragments.MyNotesFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            tools:listitem="@layout/note_list_item" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add_note_my_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/dark_beige"
+            android:contentDescription="@string/fab_add_description"
+            app:borderWidth="0dp"
+            app:fabCustomSize="54dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@id/fab_switch_layout_my_notes"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:maxImageSize="44dp"
+            app:srcCompat="@drawable/ic_add"
+            app:tint="@color/yellowish_brown" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_switch_layout_my_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/dark_beige"
+            android:contentDescription="@string/fab_switch_description"
+            app:borderWidth="0dp"
+            app:fabCustomSize="54dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:maxImageSize="34dp"
+            app:srcCompat="@drawable/ic_linear_orientation"
+            app:tint="@color/yellowish_brown" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>

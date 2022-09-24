@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">FastNotes</string>
+    <string name="user_name">User Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="register_message_login"><u>Don\'t hav an account yet? \n click here!!</u></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="my_notes">My Notes</string>
+    <string name="all_notes">All Notes</string>
+    <string name="fab_switch_description">layout switch</string>
+    <string name="fab_add_description">Add note</string>
+</resources>

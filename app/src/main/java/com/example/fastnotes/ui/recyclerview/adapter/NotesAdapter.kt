@@ -25,12 +25,12 @@ class NotesAdapter(
                     imageviewListItem.tryLoadImage(note.image)
                     textviewTitleListItem.text = note.title
                     textviewUserListItem.text = note.user.name
-                    textviewNoteListItem.text = note.note
+                    textviewNoteListItem.text = note.description
                 }else{
                     imageviewListItem.tryLoadImage(note.image)
                     textviewTitleListItem.text = note.title
                     textviewUserListItem.visibility = View.GONE
-                    textviewNoteListItem.text = note.note
+                    textviewNoteListItem.text = note.description
                 }
             }
         }

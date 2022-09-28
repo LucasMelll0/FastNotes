@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/beige"
+        tools:context=".ui.activities.NoteActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_note_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/imagebutton_back_note_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:backgroundTint="@color/invisible"
+                android:src="@drawable/ic_arrow_back" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/imagebutton_confirm_note_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:backgroundTint="@color/invisible"
+                android:src="@drawable/ic_check" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardview_imageview"
+            android:layout_width="355dp"
+            android:layout_height="370dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:cardCornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_note_activity"
+            tools:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageview_note_activity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/backgrounds/scenic" />
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_add_image_note_activity"
+            android:layout_width="190dp"
+            android:layout_height="50dp"
+            android:layout_margin="50dp"
+            android:backgroundTint="@color/dark_beige"
+            android:gravity="center"
+            android:text="@string/add_a_image"
+            android:textColor="@color/carbon"
+            app:icon="@drawable/ic_image"
+            app:iconGravity="textStart"
+            app:iconTint="@color/carbon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardview_imageview" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textinput_title_note_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="265dp"
+            android:minHeight="62dp"
+            app:layout_constraintStart_toStartOf="@id/cardview_imageview"
+            app:layout_constraintTop_toBottomOf="@id/fab_add_image_note_activity"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginTop="50dp"
+            app:boxStrokeWidth="0dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxBackgroundColor="@color/dark_beige"
+            android:hint="@string/add_a_title"
+            app:hintTextColor="@color/carbon"
+            app:boxStrokeColor="@color/yellowish_brown"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/carbon"
+                android:textSize="24sp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textinput_description_note_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minWidth="265dp"
+            android:minHeight="62dp"
+            app:layout_constraintStart_toStartOf="@id/cardview_imageview"
+            app:layout_constraintEnd_toEndOf="@id/cardview_imageview"
+            app:layout_constraintTop_toBottomOf="@id/textinput_title_note_activity"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginVertical="50dp"
+            app:boxStrokeWidth="0dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxBackgroundColor="@color/dark_beige"
+            android:hint="@string/add_a_description"
+            app:hintTextColor="@color/carbon"
+            app:boxStrokeColor="@color/yellowish_brown"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/carbon"
+                android:textSize="24sp"
+                android:inputType="textMultiLine"
+                tools:text="@tools:sample/lorem/random"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

@@ -11,4 +11,5 @@
     <color name="beige">#FDEEDC</color>
     <color name="yellowish_brown">#E38B29</color>
     <color name="carbon">#292929</color>
+    <color name="invisible">#00FFFFFF</color>
 </resources>

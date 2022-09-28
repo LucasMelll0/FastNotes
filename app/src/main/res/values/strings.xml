@@ -12,4 +12,7 @@
     <string name="all_notes">All Notes</string>
     <string name="fab_switch_description">layout switch</string>
     <string name="fab_add_description">Add note</string>
+    <string name="add_a_image">Add a Image</string>
+    <string name="add_a_title">Add a title…</string>
+    <string name="add_a_description">Add a description…</string>
 </resources>

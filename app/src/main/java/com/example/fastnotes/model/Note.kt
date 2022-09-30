@@ -9,7 +9,7 @@ import java.util.*
 data class Note(
     @PrimaryKey
     val id: String = UUID.randomUUID().toString(),
-    val user: User,
+    val user: String,
     val title: String,
     val description: String?,
     val image: String?,

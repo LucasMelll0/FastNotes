@@ -24,7 +24,7 @@ class NotesAdapter(
                 if (userFieldEnable){
                     imageviewListItem.tryLoadImage(note.image)
                     textviewTitleListItem.text = note.title
-                    textviewUserListItem.text = note.user.name
+                    textviewUserListItem.text = note.user
                     textviewNoteListItem.text = note.description
                 }else{
                     imageviewListItem.tryLoadImage(note.image)
@@ -44,8 +44,14 @@ class NotesAdapter(
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.bindItem(dataSet[position])
     }
 
     override fun getItemCount(): Int = dataSet.size
+
+    fun addAll(notes: List<Note>){
+        dataSet.clear()
+        dataSet.addAll(notes)
+    }
+
 }

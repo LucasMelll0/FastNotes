@@ -17,6 +17,7 @@ class NotesListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setsUpTabLayout()
+
     }
 
     private fun setsUpTabLayout() {

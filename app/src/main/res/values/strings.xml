@@ -20,4 +20,6 @@
     <string name="error_lenght_password">Password must be at least 6 characters long!!</string>
     <string name="error_invalid_email">This email is invalid!!</string>
     <string name="error_already_used_email">This email has already been used!!</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="error_empty_field">some field is empty!!</string>
 </resources>

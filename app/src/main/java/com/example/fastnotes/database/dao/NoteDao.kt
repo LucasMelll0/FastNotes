@@ -16,10 +16,10 @@ interface NoteDao {
     suspend fun save(note: Note)
 
     @Query("SELECT * FROM Note WHERE disabled = 0")
-    suspend fun getAll() : Flow<List<Note>>
+    fun getAll() : Flow<List<Note>>
 
     @Query("SELECT * FROM Note WHERE id = :id")
-    suspend fun get(id: String) : Flow<Note>
+    fun get(id: String) : Flow<Note>
 
     @Delete
     suspend fun delete(note: Note)

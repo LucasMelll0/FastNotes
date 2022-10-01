@@ -14,7 +14,6 @@ const val dataBaseName = "fastnotes.db"
     entities = [Note::class],
     exportSchema = true
 )
-
 abstract class AppDataBase : RoomDatabase() {
 
     abstract fun noteDao() : NoteDao
@@ -27,7 +26,7 @@ abstract class AppDataBase : RoomDatabase() {
             return db ?: Room.databaseBuilder(
                 context,
                 AppDataBase::class.java,
-                dataBaseName
+                "fastnotes.db"
             )
                 .build()
         }

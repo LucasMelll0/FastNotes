@@ -20,7 +20,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.1"
+            app:layout_constraintVertical_bias="0"
             app:srcCompat="@drawable/logo_vetor" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -105,6 +105,35 @@
                 android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edittext_confirm_password_register"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/confirm_password"
+            android:pointerIcon="arrow"
+            android:textColorHint="@color/yellowish_brown"
+            app:boxBackgroundColor="@color/dark_beige"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/yellowish_brown"
+            app:boxStrokeWidth="0dp"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/yellowish_brown"
+            app:hintTextColor="@color/yellowish_brown"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edittext_password_register">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab_register"
@@ -115,9 +144,9 @@
             android:gravity="center"
             android:text="@string/register"
             android:textColor="@color/beige"
-            app:layout_constraintEnd_toEndOf="@id/edittext_password_register"
-            app:layout_constraintStart_toStartOf="@id/edittext_password_register"
-            app:layout_constraintTop_toBottomOf="@id/edittext_password_register"
+            app:layout_constraintEnd_toEndOf="@id/edittext_confirm_password_register"
+            app:layout_constraintStart_toStartOf="@id/edittext_confirm_password_register"
+            app:layout_constraintTop_toBottomOf="@id/edittext_confirm_password_register"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

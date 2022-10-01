@@ -19,7 +19,13 @@ class AllNotesFragment : Fragment() {
 
     private val binding by lazy { FragmentAllNotesBinding.inflate(LayoutInflater.from(requireContext())) }
     private val adapter by lazy { NotesAdapter(requireContext()) }
-    private val repository by lazy { NoteRepository(AppDataBase.instance(requireContext()).noteDao()) }
+    private val repository by lazy {
+        NoteRepository(
+            AppDataBase
+                .instance(requireContext())
+                .noteDao()
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +35,7 @@ class AllNotesFragment : Fragment() {
     private fun setsUpRecyclerView() {
         binding.recyclerviewNotesAllnotes.adapter = adapter
         lifecycleScope.launch {
-            repository.getAll().collect{ notes ->
+            repository.getAll().collect { notes ->
                 adapter.addAll(notes)
             }
         }

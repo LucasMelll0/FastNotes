@@ -7,18 +7,49 @@
     android:background="@color/beige"
     android:orientation="vertical"
     tools:context=".ui.activities.NotesListActivity">
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tablayout"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="66dp"
-        app:tabBackground="@color/dark_beige"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@color/yellowish_brown"
-        app:tabMaxWidth="0dp"
-        app:tabMode="fixed"
-        app:tabTextColor="@color/yellowish_brown"
-        />
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_list_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/dark_beige"
+            >
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:layout_width="54dp"
+                android:id="@+id/imagebutton_disconnect_user"
+                android:layout_height="54dp"
+                android:src="@drawable/ic_exit"
+                android:layout_gravity="end"
+                android:layout_marginEnd="5dp"
+                android:backgroundTint="@color/invisible"
+                android:contentDescription="@string/button_disconnect_description"/>
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/imagebutton_profile_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_user"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/invisible"
+                android:contentDescription="@string/button_user_profile_description"
+                />
+        </androidx.appcompat.widget.Toolbar>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            app:tabBackground="@color/dark_beige"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/yellowish_brown"
+            app:tabMaxWidth="0dp"
+            app:tabMode="fixed"
+            app:tabTextColor="@color/yellowish_brown"
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"

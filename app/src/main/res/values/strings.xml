@@ -22,4 +22,7 @@
     <string name="error_already_used_email">This email has already been used!!</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="error_empty_field">some field is empty!!</string>
+    <string name="error_on_login">An error has occurred!! Please check your credentials!!</string>
+    <string name="button_disconnect_description">Button Disconnect</string>
+    <string name="button_user_profile_description">Button User Profile</string>
 </resources>

@@ -1,7 +1,7 @@
 package com.example.fastnotes.repositories
 
-import android.content.Context
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.fastnotes.R
 import com.example.fastnotes.model.User
 import com.example.fastnotes.ui.activities.LoginUserActivity
@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 
-class UserRepository(private val context: Context) {
+class UserRepository(private val activity: AppCompatActivity) {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
 
@@ -21,12 +21,14 @@ class UserRepository(private val context: Context) {
             user.password
         ).addOnCompleteListener { 
             if (it.isSuccessful){
-                context.goTo(NotesListActivity::class.java)
+                activity.goTo(NotesListActivity::class.java)
+                activity.finish()
             }else{
-                Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, activity.getString(R.string.error_on_login), Toast.LENGTH_SHORT).show()
             }
         }
     }
+    
 
     fun register(user: User) {
         firebaseAuth.createUserWithEmailAndPassword(
@@ -34,13 +36,14 @@ class UserRepository(private val context: Context) {
             user.password
         ).addOnCompleteListener {
             if (it.isSuccessful) {
-                changeUserNameOnFirebase(user.name)
+                changeUserNameOnFirebase(user.name!!)
                 Toast.makeText(
-                    context,
-                    context.getString(R.string.success_message_for_register_user),
+                    activity,
+                    activity.getString(R.string.success_message_for_register_user),
                     Toast.LENGTH_SHORT
                 ).show()
-                context.goTo(LoginUserActivity::class.java)
+                activity.goTo(LoginUserActivity::class.java)
+                activity.finish()
 
             } else {
                 val error = it.exception.toString()
@@ -52,29 +55,33 @@ class UserRepository(private val context: Context) {
 
     }
 
+    fun disconnect() {
+        firebaseAuth.signOut()
+    }
+
     private fun handdlesErrorForRegister(error: String) {
         if (error.contains("least 6 characters")){
             Toast.makeText(
-                context,
-                context.getString(R.string.error_lenght_password),
+                activity,
+                activity.getString(R.string.error_lenght_password),
                 Toast.LENGTH_SHORT
             ).show()
         }else if (error.contains("address is badly")){
             Toast.makeText(
-                context,
-                context.getString(R.string.error_invalid_email),
+                activity,
+                activity.getString(R.string.error_invalid_email),
                 Toast.LENGTH_SHORT
             ).show()
         }else if(error.contains("address is already")){
             Toast.makeText(
-                context,
-                context.getString(R.string.error_already_used_email),
+                activity,
+                activity.getString(R.string.error_already_used_email),
                 Toast.LENGTH_SHORT
             ).show()
         }else{
             Toast.makeText(
-                context,
-                context.getString(R.string.error_message_for_register_user),
+                activity,
+                activity.getString(R.string.error_message_for_register_user),
                 Toast.LENGTH_SHORT
             ).show()
         }

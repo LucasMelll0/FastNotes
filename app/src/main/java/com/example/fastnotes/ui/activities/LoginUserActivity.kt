@@ -1,12 +1,13 @@
 package com.example.fastnotes.ui.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.fastnotes.R
 import com.example.fastnotes.databinding.ActivityLoginUserBinding
 import com.example.fastnotes.model.User
 import com.example.fastnotes.repositories.UserRepository
 import com.example.fastnotes.ui.activities.extensions.goTo
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.material.snackbar.Snackbar
 
 class LoginUserActivity : AppCompatActivity() {
 
@@ -51,8 +52,17 @@ class LoginUserActivity : AppCompatActivity() {
 
     private fun fieldsNotEmpty(): Boolean {
         binding.apply {
-            return !(edittextEmailLogin.editText!!.text.isEmpty()
-                    && edittextPasswordLogin.editText!!.text.isEmpty())
+            return if(edittextEmailLogin.editText!!.text.isEmpty()
+                    && edittextPasswordLogin.editText!!.text.isEmpty()){
+                Snackbar.make(
+                    binding.root,
+                    R.string.error_empty_field,
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                false
+            }else{
+                true
+            }
         }
     }
 

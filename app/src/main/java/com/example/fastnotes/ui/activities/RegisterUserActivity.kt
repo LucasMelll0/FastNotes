@@ -1,29 +1,22 @@
 package com.example.fastnotes.ui.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils
-import android.util.Log
-import android.widget.Toast
-import androidx.core.view.isEmpty
+import androidx.appcompat.app.AppCompatActivity
 import com.example.fastnotes.R
 import com.example.fastnotes.databinding.ActivityRegisterUserBinding
 import com.example.fastnotes.model.User
 import com.example.fastnotes.repositories.UserRepository
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.material.snackbar.Snackbar
 
-const val TAG = "Register Tests"
 class RegisterUserActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityRegisterUserBinding.inflate(layoutInflater) }
     private val repository by lazy { UserRepository(this) }
-    private val firebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setsUpFab()
-        Log.i(TAG, "onCreate: ${firebaseAuth.currentUser!!.displayName}")
     }
 
     private fun setsUpFab() {
@@ -41,13 +34,17 @@ class RegisterUserActivity : AppCompatActivity() {
 
     private fun samePasswords(): Boolean {
         binding.apply {
-            val passWord = edittextPasswordRegister.editText!!.text.toString()
-            val confirmationPassword = edittextConfirmPasswordRegister.editText!!.text.toString()
+            val passWord = edittextPasswordRegister.editText!!.text.toString().trim()
+            val confirmationPassword = edittextConfirmPasswordRegister.editText!!.text.toString().trim()
 
             return if(passWord.equals(confirmationPassword)){
                 true
             }else{
-                Toast.makeText(this@RegisterUserActivity, "The passwords is not same!!", Toast.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.root,
+                    R.string.error_password_not_same,
+                    Snackbar.LENGTH_SHORT
+                ).show()
                 false
             }
         }
@@ -60,7 +57,11 @@ class RegisterUserActivity : AppCompatActivity() {
                 || edittextPasswordRegister.editText?.text!!.isEmpty()
                 || edittextConfirmPasswordRegister.editText?.text!!.isEmpty()
             ){
-                Toast.makeText(this@RegisterUserActivity, getString(R.string.error_empty_field), Toast.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.root,
+                    R.string.error_empty_field,
+                    Snackbar.LENGTH_SHORT
+                ).show()
                 false
             }else{
                 true

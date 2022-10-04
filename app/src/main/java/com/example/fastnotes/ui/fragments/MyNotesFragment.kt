@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.fastnotes.databinding.FragmentMyNotesBinding
+import com.example.fastnotes.ui.activities.NoteActivity
+import com.example.fastnotes.ui.activities.extensions.goTo
 
 
 class MyNotesFragment : Fragment() {
@@ -17,5 +19,17 @@ class MyNotesFragment : Fragment() {
     ): View {
         return binding.root
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setsUpFabAddNote()
+    }
+
+    private fun setsUpFabAddNote() {
+        binding.fabAddNoteMyNotes.setOnClickListener {
+            requireContext().goTo(NoteActivity::class.java)
+        }
+    }
+
 
 }

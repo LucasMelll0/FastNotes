@@ -25,4 +25,6 @@
     <string name="error_on_login">An error has occurred!! Please check your credentials!!</string>
     <string name="button_disconnect_description">Button Disconnect</string>
     <string name="button_user_profile_description">Button User Profile</string>
+    <string name="error_password_not_same">The passwords is not same!!</string>
+    <string name="content_description_fab_add_image">Add a Image</string>
 </resources>

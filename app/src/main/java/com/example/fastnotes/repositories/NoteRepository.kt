@@ -1,17 +1,47 @@
 package com.example.fastnotes.repositories
 
-import com.example.fastnotes.database.dao.NoteDao
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.fastnotes.model.Note
-import kotlinx.coroutines.flow.Flow
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class NoteRepository(
-    val dao: NoteDao
-) {
-    suspend fun getAll() : Flow<List<Note>> {
-        return dao.getAll()
-    }
+    private val activity: AppCompatActivity
+){
 
-    suspend fun save(note: Note){
-        dao.save(note)
+    private val database = FirebaseDatabase.getInstance().reference
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+
+    fun saveNote(note: Note){
+        currentUser?.let {
+            database
+                .child("note")
+                .child(it.uid)
+                .child(note.id)
+                .setValue(note)
+                .addOnCompleteListener { task ->
+                    if(task.isSuccessful){
+                        activity.onBackPressed()
+                        Toast.makeText(
+                            activity,
+                            "Note saved with successful!!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }else{
+                        Toast.makeText(
+                            activity,
+                            "Error on save note!!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }.addOnFailureListener {
+                    Toast.makeText(
+                        activity,
+                        "Error on save note!!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+        }
     }
 }

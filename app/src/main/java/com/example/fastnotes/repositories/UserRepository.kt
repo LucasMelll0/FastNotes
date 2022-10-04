@@ -19,16 +19,20 @@ class UserRepository(private val activity: AppCompatActivity) {
         firebaseAuth.signInWithEmailAndPassword(
             user.email,
             user.password
-        ).addOnCompleteListener { 
-            if (it.isSuccessful){
+        ).addOnCompleteListener {
+            if (it.isSuccessful) {
                 activity.goTo(NotesListActivity::class.java)
                 activity.finish()
-            }else{
-                Toast.makeText(activity, activity.getString(R.string.error_on_login), Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(
+                    activity,
+                    activity.getString(R.string.error_on_login),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
-    
+
 
     fun register(user: User) {
         firebaseAuth.createUserWithEmailAndPassword(
@@ -60,30 +64,35 @@ class UserRepository(private val activity: AppCompatActivity) {
     }
 
     private fun handdlesErrorForRegister(error: String) {
-        if (error.contains("least 6 characters")){
-            Toast.makeText(
-                activity,
-                activity.getString(R.string.error_lenght_password),
-                Toast.LENGTH_SHORT
-            ).show()
-        }else if (error.contains("address is badly")){
-            Toast.makeText(
-                activity,
-                activity.getString(R.string.error_invalid_email),
-                Toast.LENGTH_SHORT
-            ).show()
-        }else if(error.contains("address is already")){
-            Toast.makeText(
-                activity,
-                activity.getString(R.string.error_already_used_email),
-                Toast.LENGTH_SHORT
-            ).show()
-        }else{
-            Toast.makeText(
-                activity,
-                activity.getString(R.string.error_message_for_register_user),
-                Toast.LENGTH_SHORT
-            ).show()
+        when {
+            (error.contains("least 6 characters")) -> {
+                Toast.makeText(
+                    activity,
+                    activity.getString(R.string.error_lenght_password),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            (error.contains("address is badly")) -> {
+                Toast.makeText(
+                    activity,
+                    activity.getString(R.string.error_invalid_email),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            (error.contains("address is already")) -> {
+                Toast.makeText(
+                    activity,
+                    activity.getString(R.string.error_already_used_email),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else -> {
+                Toast.makeText(
+                    activity,
+                    activity.getString(R.string.error_message_for_register_user),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

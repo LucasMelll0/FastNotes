@@ -6,12 +6,17 @@
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/drawable/ic_exit.xml" value="0.1935" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/drawable/ic_user.xml" value="0.1935" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/drawable/rounded_background.xml" value="0.1035" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/activity_authentication.xml" value="0.25" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/activity_login_user.xml" value="0.2" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/activity_note.xml" value="0.21758839528558477" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/activity_notes.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/activity_register_user.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_all_notes.xml" value="0.176" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_login.xml" value="0.25" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_my_notes.xml" value="0.176" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_notes_list.xml" value="0.25" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_register.xml" value="0.2359375" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/my_note_list_item.xml" value="0.2" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/note_list_item.xml" value="0.2" />
       </map>

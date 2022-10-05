@@ -1,28 +1,42 @@
-package com.example.fastnotes.ui.activities
+package com.example.fastnotes.ui.fragments
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
-import com.example.fastnotes.databinding.ActivityNotesBinding
+import com.example.fastnotes.databinding.FragmentNotesListBinding
 import com.example.fastnotes.repositories.UserRepository
-import com.example.fastnotes.ui.activities.extensions.goTo
-import com.example.fastnotes.ui.fragments.AllNotesFragment
-import com.example.fastnotes.ui.fragments.MyNotesFragment
 import com.example.fastnotes.ui.viewpager.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-class NotesListActivity : AppCompatActivity() {
+class NotesListFragment : Fragment() {
 
-    private val binding by lazy { ActivityNotesBinding.inflate(layoutInflater) }
+    private var _binding: FragmentNotesListBinding? = null
+    private val binding get() = _binding!!
     private val repository by lazy { UserRepository(this) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentNotesListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setsUpToolbar()
         setsUpTabLayout()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setsUpToolbar() {
@@ -32,20 +46,19 @@ class NotesListActivity : AppCompatActivity() {
 
     private fun setsUpProfileButton() {
         binding.imagebuttonProfileUser.setOnClickListener {
-            Toast.makeText(this, "User Profile", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "User Profile", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun setsUpDisconnectButton() {
         binding.imagebuttonDisconnectUser.setOnClickListener {
             repository.disconnect()
-            goTo(LoginUserActivity::class.java)
-            finish()
+            findNavController().navigate(R.id.action_notesListFragment_to_loginFragment)
         }
     }
 
     private fun setsUpTabLayout() {
-        val adapter = ViewPagerAdapter(this)
+        val adapter = ViewPagerAdapter(requireActivity())
         binding.apply {
             viewpager.adapter = adapter
             adapter.addFragment(MyNotesFragment(), getString(R.string.my_notes))
@@ -58,4 +71,5 @@ class NotesListActivity : AppCompatActivity() {
             mediator.attach()
         }
     }
+
 }

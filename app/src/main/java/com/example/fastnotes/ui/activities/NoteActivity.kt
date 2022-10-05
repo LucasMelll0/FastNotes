@@ -9,7 +9,7 @@ import com.example.fastnotes.repositories.UserRepository
 
 class NoteActivity : AppCompatActivity() {
 
-    private val binding by lazy { ActivityNoteBinding.inflate(layoutInflater) }
+    /*private val binding by lazy { ActivityNoteBinding.inflate(layoutInflater) }
     private val repository by lazy { NoteRepository(this) }
     private val userRepository by lazy { UserRepository(this) }
 
@@ -41,6 +41,6 @@ class NoteActivity : AppCompatActivity() {
     }
 
     private fun titleNotEmpty(): Boolean =
-        binding.textinputTitleNoteActivity.editText!!.text.isNotEmpty()
+        binding.textinputTitleNoteActivity.editText!!.text.isNotEmpty()*/
 
 }

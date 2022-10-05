@@ -1,31 +1,47 @@
-package com.example.fastnotes.ui.activities
+package com.example.fastnotes.ui.fragments
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
-import com.example.fastnotes.databinding.ActivityLoginUserBinding
+import com.example.fastnotes.databinding.FragmentLoginBinding
 import com.example.fastnotes.model.User
 import com.example.fastnotes.repositories.UserRepository
-import com.example.fastnotes.ui.activities.extensions.goTo
 import com.google.android.material.snackbar.Snackbar
 
-class LoginUserActivity : AppCompatActivity() {
+class LoginFragment : Fragment() {
 
-    private val binding by lazy { ActivityLoginUserBinding.inflate(layoutInflater) }
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
+
     private val repository by lazy { UserRepository(this) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         checkAreConnected()
         setsUpFab()
         setsUpRegisterText()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     private fun checkAreConnected() {
         repository.getUser()?.let {
-            goTo(NotesListActivity::class.java)
-            finish()
+            findNavController().navigate(R.id.action_loginFragment_to_notesListFragment)
         }
     }
 
@@ -33,7 +49,7 @@ class LoginUserActivity : AppCompatActivity() {
         binding.fabLogin.setOnClickListener {
             if(fieldsNotEmpty()){
                 val user = createUser()
-                    repository.connect(user)
+                repository.connect(user)
             }
         }
     }
@@ -53,7 +69,7 @@ class LoginUserActivity : AppCompatActivity() {
     private fun fieldsNotEmpty(): Boolean {
         binding.apply {
             return if(edittextEmailLogin.editText!!.text.isEmpty()
-                    && edittextPasswordLogin.editText!!.text.isEmpty()){
+                && edittextPasswordLogin.editText!!.text.isEmpty()){
                 Snackbar.make(
                     binding.root,
                     R.string.error_empty_field,
@@ -68,7 +84,9 @@ class LoginUserActivity : AppCompatActivity() {
 
     private fun setsUpRegisterText() {
         binding.textviewRegisterMessageLogin.setOnClickListener {
-            goTo(RegisterUserActivity::class.java)
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
     }
+
+
 }

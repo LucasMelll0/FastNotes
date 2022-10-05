@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/beige"
     android:orientation="vertical"
-    tools:context=".ui.activities.NotesListActivity">
+    tools:context=".ui.fragments.NotesListFragment">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

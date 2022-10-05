@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.fastnotes.databinding.FragmentMyNotesBinding
 import com.example.fastnotes.ui.activities.NoteActivity
@@ -27,7 +28,7 @@ class MyNotesFragment : Fragment() {
 
     private fun setsUpFabAddNote() {
         binding.fabAddNoteMyNotes.setOnClickListener {
-            requireContext().goTo(NoteActivity::class.java)
+            Toast.makeText(requireContext(), "Testes", Toast.LENGTH_SHORT).show()
         }
     }
 

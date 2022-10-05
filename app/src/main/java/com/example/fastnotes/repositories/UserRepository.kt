@@ -2,16 +2,16 @@ package com.example.fastnotes.repositories
 
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
 import com.example.fastnotes.model.User
-import com.example.fastnotes.ui.activities.LoginUserActivity
-import com.example.fastnotes.ui.activities.NotesListActivity
-import com.example.fastnotes.ui.activities.extensions.goTo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 
-class UserRepository(private val activity: AppCompatActivity) {
+class UserRepository(private val fragment: Fragment) {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
 
@@ -21,16 +21,20 @@ class UserRepository(private val activity: AppCompatActivity) {
             user.password
         ).addOnCompleteListener {
             if (it.isSuccessful) {
-                activity.goTo(NotesListActivity::class.java)
-                activity.finish()
+                goTo(R.id.action_loginFragment_to_notesListFragment)
             } else {
                 Toast.makeText(
-                    activity,
-                    activity.getString(R.string.error_on_login),
+                    fragment.requireContext(),
+                    fragment.getString(R.string.error_on_login),
                     Toast.LENGTH_SHORT
                 ).show()
             }
         }
+    }
+    fun goTo(destination: Int){
+        fragment
+            .findNavController()
+            .navigate(destination)
     }
 
 
@@ -41,13 +45,13 @@ class UserRepository(private val activity: AppCompatActivity) {
         ).addOnCompleteListener {
             if (it.isSuccessful) {
                 changeUserNameOnFirebase(user.name!!)
+
                 Toast.makeText(
-                    activity,
-                    activity.getString(R.string.success_message_for_register_user),
+                    fragment.requireContext(),
+                    fragment.getString(R.string.success_message_for_register_user),
                     Toast.LENGTH_SHORT
                 ).show()
-                activity.goTo(LoginUserActivity::class.java)
-                activity.finish()
+                goTo(R.id.action_registerFragment_to_loginFragment)
 
             } else {
                 val error = it.exception.toString()
@@ -67,29 +71,29 @@ class UserRepository(private val activity: AppCompatActivity) {
         when {
             (error.contains("least 6 characters")) -> {
                 Toast.makeText(
-                    activity,
-                    activity.getString(R.string.error_lenght_password),
+                    fragment.requireContext(),
+                    fragment.getString(R.string.error_lenght_password),
                     Toast.LENGTH_SHORT
                 ).show()
             }
             (error.contains("address is badly")) -> {
                 Toast.makeText(
-                    activity,
-                    activity.getString(R.string.error_invalid_email),
+                    fragment.requireContext(),
+                    fragment.getString(R.string.error_invalid_email),
                     Toast.LENGTH_SHORT
                 ).show()
             }
             (error.contains("address is already")) -> {
                 Toast.makeText(
-                    activity,
-                    activity.getString(R.string.error_already_used_email),
+                    fragment.requireContext(),
+                    fragment.getString(R.string.error_already_used_email),
                     Toast.LENGTH_SHORT
                 ).show()
             }
             else -> {
                 Toast.makeText(
-                    activity,
-                    activity.getString(R.string.error_message_for_register_user),
+                    fragment.requireContext(),
+                    fragment.getString(R.string.error_message_for_register_user),
                     Toast.LENGTH_SHORT
                 ).show()
             }

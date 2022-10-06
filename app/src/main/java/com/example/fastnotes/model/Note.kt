@@ -1,11 +1,17 @@
 package com.example.fastnotes.model
 
+import android.os.Parcelable
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
+@Parcelize
 data class Note(
-    val id: String = UUID.randomUUID().toString(),
-    val user: String,
-    val title: String,
-    val description: String?,
-    val image: String? = ""
-)
+    var id: String = UUID.randomUUID().toString(),
+    var user: String ="",
+    var title: String = "",
+    var description: String = "",
+    var image: String = ""
+): Parcelable{
+
+}

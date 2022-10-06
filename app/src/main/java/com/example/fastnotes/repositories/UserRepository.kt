@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
 import com.example.fastnotes.model.User
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
@@ -21,10 +22,10 @@ class UserRepository(private val fragment: Fragment) {
             if (it.isSuccessful) {
                 goTo(R.id.action_loginFragment_to_notesListFragment)
             } else {
-                Toast.makeText(
-                    fragment.requireContext(),
+                Snackbar.make(
+                    fragment.requireView(),
                     fragment.getString(R.string.error_on_login),
-                    Toast.LENGTH_SHORT
+                    Snackbar.LENGTH_SHORT
                 ).show()
             }
         }
@@ -68,10 +69,10 @@ class UserRepository(private val fragment: Fragment) {
     private fun handdlesErrorForRegister(error: String) {
         when {
             (error.contains("least 6 characters")) -> {
-                Toast.makeText(
-                    fragment.requireContext(),
+                Snackbar.make(
+                    fragment.requireView(),
                     fragment.getString(R.string.error_lenght_password),
-                    Toast.LENGTH_SHORT
+                    Snackbar.LENGTH_SHORT
                 ).show()
             }
             (error.contains("address is badly")) -> {
@@ -82,17 +83,17 @@ class UserRepository(private val fragment: Fragment) {
                 ).show()
             }
             (error.contains("address is already")) -> {
-                Toast.makeText(
-                    fragment.requireContext(),
+                Snackbar.make(
+                    fragment.requireView(),
                     fragment.getString(R.string.error_already_used_email),
-                    Toast.LENGTH_SHORT
+                    Snackbar.LENGTH_SHORT
                 ).show()
             }
             else -> {
-                Toast.makeText(
-                    fragment.requireContext(),
+                Snackbar.make(
+                    fragment.requireView(),
                     fragment.getString(R.string.error_message_for_register_user),
-                    Toast.LENGTH_SHORT
+                    Snackbar.LENGTH_SHORT
                 ).show()
             }
         }

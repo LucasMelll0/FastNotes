@@ -38,6 +38,10 @@ class NotesListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setsUpOnBackPressed()
+    }
+
+    private fun setsUpOnBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             requireActivity().finish()
         }

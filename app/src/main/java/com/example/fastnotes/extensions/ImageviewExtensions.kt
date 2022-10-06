@@ -4,8 +4,10 @@ import android.view.View
 import android.widget.ImageView
 import coil.load
 
-fun ImageView.tryLoadImage(image: String? = null) {
-    image?.let {
+fun ImageView.tryLoadImage(image: String = "") {
+    if (image != "") {
         load(image)
-    } ?: run { visibility = View.GONE }
+    } else {
+        run { visibility = View.GONE }
+    }
 }

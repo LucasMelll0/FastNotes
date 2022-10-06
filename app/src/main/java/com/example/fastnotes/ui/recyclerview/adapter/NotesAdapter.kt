@@ -1,5 +1,6 @@
 package com.example.fastnotes.ui.recyclerview.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -49,9 +50,6 @@ class NotesAdapter(
 
     override fun getItemCount(): Int = dataSet.size
 
-    fun addAll(notes: List<Note>){
-        dataSet.clear()
-        dataSet.addAll(notes)
-    }
+ 
 
 }

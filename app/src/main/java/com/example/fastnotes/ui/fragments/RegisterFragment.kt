@@ -10,6 +10,7 @@ import com.example.fastnotes.R
 import com.example.fastnotes.databinding.FragmentRegisterBinding
 import com.example.fastnotes.model.User
 import com.example.fastnotes.repositories.UserRepository
+import com.google.android.material.snackbar.Snackbar
 
 
 class RegisterFragment : Fragment() {
@@ -52,10 +53,10 @@ class RegisterFragment : Fragment() {
             return if (passWord == confirmationPassword) {
                 true
             } else {
-                Toast.makeText(
-                    requireContext(),
+                Snackbar.make(
+                    requireView(),
                     "The passwords is not same!!",
-                    Toast.LENGTH_SHORT
+                    Snackbar.LENGTH_SHORT
                 ).show()
                 false
             }
@@ -69,10 +70,10 @@ class RegisterFragment : Fragment() {
                 || edittextPasswordRegister.editText?.text!!.isEmpty()
                 || edittextConfirmPasswordRegister.editText?.text!!.isEmpty()
             ) {
-                Toast.makeText(
-                    requireContext(),
+                Snackbar.make(
+                    requireView(),
                     getString(R.string.error_empty_field),
-                    Toast.LENGTH_SHORT
+                    Snackbar.LENGTH_SHORT
                 ).show()
                 false
             } else {

@@ -12,9 +12,9 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_notes_mynotes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             tools:listitem="@layout/note_list_item" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

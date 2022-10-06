@@ -1,19 +1,24 @@
 package com.example.fastnotes.repositories
 
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.model.Note
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class NoteRepository(
-    private val activity: AppCompatActivity
-){
+    private val fragment: Fragment,
+) {
 
-    private val database = FirebaseDatabase.getInstance().reference
+    val database = FirebaseDatabase.getInstance().reference
     private val currentUser = FirebaseAuth.getInstance().currentUser
+    private val userNotes = mutableListOf<Note>()
 
-    fun saveNote(note: Note){
+    fun saveNote(note: Note) {
         currentUser?.let {
             database
                 .child("note")
@@ -21,27 +26,32 @@ class NoteRepository(
                 .child(note.id)
                 .setValue(note)
                 .addOnCompleteListener { task ->
-                    if(task.isSuccessful){
-                        activity.onBackPressed()
-                        Toast.makeText(
-                            activity,
+                    if (task.isSuccessful) {
+                        fragment.findNavController().popBackStack()
+                        Snackbar.make(
+                            fragment.requireView(),
                             "Note saved with successful!!",
-                            Toast.LENGTH_SHORT
+                            Snackbar.LENGTH_SHORT
                         ).show()
-                    }else{
-                        Toast.makeText(
-                            activity,
+                    } else {
+                        Snackbar.make(
+                            fragment.requireView(),
                             "Error on save note!!",
-                            Toast.LENGTH_SHORT
+                            Snackbar.LENGTH_SHORT
                         ).show()
                     }
                 }.addOnFailureListener {
-                    Toast.makeText(
-                        activity,
+                    Snackbar.make(
+                        fragment.requireView(),
                         "Error on save note!!",
-                        Toast.LENGTH_SHORT
+                        Snackbar.LENGTH_SHORT
                     ).show()
                 }
         }
     }
+
+
+
+
+
 }

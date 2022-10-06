@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
@@ -32,6 +33,14 @@ class NotesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setsUpToolbar()
         setsUpTabLayout()
+
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            requireActivity().finish()
+        }
     }
 
     override fun onDestroyView() {

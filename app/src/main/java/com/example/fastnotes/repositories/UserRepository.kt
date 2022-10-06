@@ -1,9 +1,7 @@
 package com.example.fastnotes.repositories
 
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
 import com.example.fastnotes.model.User
@@ -31,7 +29,7 @@ class UserRepository(private val fragment: Fragment) {
             }
         }
     }
-    fun goTo(destination: Int){
+    private fun goTo(destination: Int){
         fragment
             .findNavController()
             .navigate(destination)
@@ -101,10 +99,12 @@ class UserRepository(private val fragment: Fragment) {
     }
 
     private fun changeUserNameOnFirebase(name: String) {
-        val nameChangeRequest = userProfileChangeRequest {
-            displayName = name
+        firebaseAuth.currentUser?.let {
+            val nameChangeRequest = userProfileChangeRequest {
+                displayName = name
+            }
+            it.updateProfile(nameChangeRequest)
         }
-        firebaseAuth.currentUser!!.updateProfile(nameChangeRequest)
     }
 
     fun getUser(): FirebaseUser? = firebaseAuth.currentUser

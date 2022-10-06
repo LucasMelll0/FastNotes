@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
@@ -35,10 +36,18 @@ class LoginFragment : Fragment() {
         setsUpRegisterText()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            requireActivity().finish()
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     private fun checkAreConnected() {
         repository.getUser()?.let {
             findNavController().navigate(R.id.action_loginFragment_to_notesListFragment)
@@ -47,14 +56,14 @@ class LoginFragment : Fragment() {
 
     private fun setsUpFab() {
         binding.fabLogin.setOnClickListener {
-            if(fieldsNotEmpty()){
+            if (fieldsNotEmpty()) {
                 val user = createUser()
                 repository.connect(user)
             }
         }
     }
 
-    private fun createUser() : User {
+    private fun createUser(): User {
         binding.apply {
             val email = edittextEmailLogin.editText!!.text.toString()
             val password = edittextPasswordLogin.editText!!.text.toString()
@@ -68,15 +77,16 @@ class LoginFragment : Fragment() {
 
     private fun fieldsNotEmpty(): Boolean {
         binding.apply {
-            return if(edittextEmailLogin.editText!!.text.isEmpty()
-                && edittextPasswordLogin.editText!!.text.isEmpty()){
+            return if (edittextEmailLogin.editText!!.text.isEmpty()
+                && edittextPasswordLogin.editText!!.text.isEmpty()
+            ) {
                 Snackbar.make(
                     binding.root,
                     R.string.error_empty_field,
                     Snackbar.LENGTH_SHORT
                 ).show()
                 false
-            }else{
+            } else {
                 true
             }
         }

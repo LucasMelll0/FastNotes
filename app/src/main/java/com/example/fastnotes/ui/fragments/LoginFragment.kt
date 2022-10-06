@@ -78,7 +78,7 @@ class LoginFragment : Fragment() {
     private fun fieldsNotEmpty(): Boolean {
         binding.apply {
             return if (edittextEmailLogin.editText!!.text.isEmpty()
-                && edittextPasswordLogin.editText!!.text.isEmpty()
+                || edittextPasswordLogin.editText!!.text.isEmpty()
             ) {
                 Snackbar.make(
                     binding.root,

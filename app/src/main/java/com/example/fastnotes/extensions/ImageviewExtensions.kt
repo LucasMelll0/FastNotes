@@ -5,9 +5,9 @@ import android.widget.ImageView
 import coil.load
 
 fun ImageView.tryLoadImage(image: String = "") {
-    if (image != "") {
+    if (image.trim() != "") {
         load(image)
     } else {
-        run { visibility = View.GONE }
+        visibility = View.GONE 
     }
 }

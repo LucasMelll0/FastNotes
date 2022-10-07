@@ -13,14 +13,27 @@ import com.example.fastnotes.model.Note
 class NotesAdapter(
     private val context: Context,
     noteList: List<Note> = emptyList(),
-    private val userFieldEnable: Boolean = true
+    private val userFieldEnable: Boolean = true,
+    var whenClickItem: (id: String) -> Unit = {}
 ) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
 
     private val dataSet: MutableList<Note> = noteList.toMutableList()
 
     inner class NotesViewHolder(private val binding: NoteListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
+        private lateinit var note: Note
+
+        init {
+            itemView.setOnClickListener {
+                if (::note.isInitialized){
+                    whenClickItem(note.id)
+                }
+            }
+        }
+
         fun bindItem(note: Note){
+            this.note = note
+
             binding.apply {
                 if (userFieldEnable){
                     imageviewListItem.tryLoadImage(note.image)
@@ -50,6 +63,6 @@ class NotesAdapter(
 
     override fun getItemCount(): Int = dataSet.size
 
- 
+
 
 }

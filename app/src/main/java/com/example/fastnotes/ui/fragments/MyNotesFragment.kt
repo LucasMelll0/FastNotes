@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.fastnotes.R
+import com.example.fastnotes.database.DATABASE_ERROR
+import com.example.fastnotes.database.NOTE_PATH
 import com.example.fastnotes.databinding.FragmentMyNotesBinding
 import com.example.fastnotes.model.Note
 import com.example.fastnotes.repositories.NoteRepository
@@ -37,14 +39,14 @@ class MyNotesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setsUpFabAddNote()
-        getTasks()
+        getNotes()
     }
 
-    private fun getTasks() {
+    private fun getNotes() {
         userRepository.getUser()?.let { user ->
             repository
                 .database
-                .child("note")
+                .child(NOTE_PATH)
                 .child(user.uid)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -54,14 +56,16 @@ class MyNotesFragment : Fragment() {
                                 val note = snap.getValue(Note::class.java) as Note
                                 noteList.add(note)
                             }
+                            noteList.reverse()
                             setsUpRecyclerView()
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
+                        Log.e(DATABASE_ERROR, "onCancelled: $error")
                         Snackbar.make(
                             requireView(),
-                            "An error has occurred on get notes!!",
+                            getString(R.string.error_on_get_notes),
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
@@ -71,6 +75,11 @@ class MyNotesFragment : Fragment() {
 
     private fun setsUpRecyclerView() {
         val adapter = NotesAdapter(requireContext(), noteList, false)
+        adapter.whenClickItem = { noteId ->
+            val action = NotesListFragmentDirections
+                .actionNotesListFragmentToNoteFragment(noteId)
+                findNavController().navigate(action)
+        }
         binding.recyclerviewNotesMynotes.setHasFixedSize(true)
         binding.recyclerviewNotesMynotes.layoutManager = StaggeredGridLayoutManager(2, 1)
         binding.recyclerviewNotesMynotes.adapter = adapter
@@ -78,7 +87,9 @@ class MyNotesFragment : Fragment() {
 
     private fun setsUpFabAddNote() {
         binding.fabAddNoteMyNotes.setOnClickListener {
-            findNavController().navigate(R.id.action_notesListFragment_to_noteFragment)
+            NotesListFragmentDirections.actionNotesListFragmentToNoteFragment(null).apply {
+                findNavController().navigate(this)
+            }
         }
     }
 

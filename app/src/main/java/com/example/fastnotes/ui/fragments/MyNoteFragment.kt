@@ -1,31 +1,23 @@
 package com.example.fastnotes.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.fastnotes.R
-import com.example.fastnotes.database.DATABASE_ERROR
-import com.example.fastnotes.database.NOTE_PATH
-import com.example.fastnotes.databinding.FragmentNoteBinding
+import com.example.fastnotes.databinding.FragmentMyNoteBinding
 import com.example.fastnotes.extensions.tryLoadImage
 import com.example.fastnotes.model.Note
 import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 
 
-class NoteFragment : Fragment() {
+class MyNoteFragment : Fragment() {
 
-    private val args: NoteFragmentArgs by navArgs()
-    private var _binding: FragmentNoteBinding? = null
+    private val args: MyNoteFragmentArgs by navArgs()
+    private var _binding: FragmentMyNoteBinding? = null
     private val binding get() = _binding!!
     private val repository by lazy { NoteRepository(this) }
     private val userRepository by lazy { UserRepository(this) }
@@ -36,7 +28,7 @@ class NoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNoteBinding.inflate(inflater, container, false)
+        _binding = FragmentMyNoteBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -58,33 +50,9 @@ class NoteFragment : Fragment() {
     }
 
     private fun checkHasArgs() {
-        args.noteId?.let { id ->
-            userRepository.getUser()?.let { user ->
-                repository
-                    .database
-                    .child(NOTE_PATH)
-                    .child(user.uid)
-                    .child(id)
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            if (snapshot.exists()) {
-                                val note = snapshot.getValue(Note::class.java) as Note
-                                fillFields(note)
-                                setsUpFabDelete()
-                            }
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            Log.e(DATABASE_ERROR, "onCancelled: $error")
-                            Snackbar.make(
-                                requireView(),
-                                getString(R.string.error_loading_note),
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                        }
-
-                    })
-            }
+        args.note?.let { note ->
+            fillFields(note)
+            setsUpFabDelete()
         } ?: setsUpFabDelete()
     }
 
@@ -93,13 +61,13 @@ class NoteFragment : Fragment() {
             noteId = note.id
             imageviewNoteActivity.tryLoadImage(note.image)
             textinputTitleNoteActivity.editText?.setText(note.title)
-            textinputDescriptionNoteActivity.editText?.setText(note.title)
+            textinputDescriptionNoteActivity.editText?.setText(note.description)
         }
     }
 
     private fun setsUpBackButton() {
         binding.imagebuttonBackNoteActivity.setOnClickListener {
-            findNavController().navigate(R.id.action_noteFragment_to_notesListFragment)
+            findNavController().popBackStack()
         }
     }
 
@@ -120,12 +88,14 @@ class NoteFragment : Fragment() {
                 Note(
                     id = noteId!!,
                     user = userRepository.getUser()?.displayName.toString(),
+                    userId = userRepository.getUser()!!.uid,
                     title = title,
                     description = description
                 )
             } else {
                 Note(
                     user = userRepository.getUser()?.displayName.toString(),
+                    userId = userRepository.getUser()!!.uid,
                     title = title,
                     description = description
                 )

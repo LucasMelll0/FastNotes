@@ -8,7 +8,8 @@ import java.util.*
 @Parcelize
 data class Note(
     var id: String = UUID.randomUUID().toString(),
-    var user: String ="",
+    var user: String = "",
+    var userId: String = "",
     var title: String = "",
     var description: String = "",
     var image: String = ""

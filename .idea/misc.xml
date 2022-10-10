@@ -12,8 +12,10 @@
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/activity_note.xml" value="0.21758839528558477" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/activity_notes.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/activity_register_user.xml" value="0.264" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_all_note.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_all_notes.xml" value="0.176" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_login.xml" value="0.25" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_my_note.xml" value="0.25" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_my_notes.xml" value="0.176" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_note.xml" value="0.25" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_notes_list.xml" value="0.25" />

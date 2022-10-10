@@ -33,5 +33,5 @@
     <string name="delete">DELETE</string>
     <string name="note_delet_success">The note was successfully deleted!!</string>
     <string name="error_on_delete_note">Error deleting note!!</string>
-    <string name="error_loading_note">Loading note error!!</string>
+    <string name="error_loading_note">Error on loading note!!</string>
 </resources>

@@ -14,7 +14,7 @@ class NotesAdapter(
     private val context: Context,
     noteList: List<Note> = emptyList(),
     private val userFieldEnable: Boolean = true,
-    var whenClickItem: (id: String) -> Unit = {}
+    var whenClickItem: (note: Note) -> Unit = {}
 ) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
 
     private val dataSet: MutableList<Note> = noteList.toMutableList()
@@ -26,7 +26,7 @@ class NotesAdapter(
         init {
             itemView.setOnClickListener {
                 if (::note.isInitialized){
-                    whenClickItem(note.id)
+                    whenClickItem(note)
                 }
             }
         }

@@ -36,10 +36,10 @@ class MyNotesFragment : Fragment() {
         return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setsUpFabAddNote()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         getNotes()
+        setsUpFabAddNote()
     }
 
     private fun getNotes() {
@@ -75,9 +75,9 @@ class MyNotesFragment : Fragment() {
 
     private fun setsUpRecyclerView() {
         val adapter = NotesAdapter(requireContext(), noteList, false)
-        adapter.whenClickItem = { noteId ->
+        adapter.whenClickItem = { note ->
             val action = NotesListFragmentDirections
-                .actionNotesListFragmentToNoteFragment(noteId)
+                .actionNotesListFragmentToMyNoteFragment(note)
                 findNavController().navigate(action)
         }
         binding.recyclerviewNotesMynotes.setHasFixedSize(true)
@@ -87,7 +87,7 @@ class MyNotesFragment : Fragment() {
 
     private fun setsUpFabAddNote() {
         binding.fabAddNoteMyNotes.setOnClickListener {
-            NotesListFragmentDirections.actionNotesListFragmentToNoteFragment(null).apply {
+            NotesListFragmentDirections.actionNotesListFragmentToMyNoteFragment(null).apply {
                 findNavController().navigate(this)
             }
         }

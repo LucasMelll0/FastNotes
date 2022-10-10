@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.fastnotes.R
 import com.example.fastnotes.database.DATABASE_ERROR
@@ -28,8 +29,8 @@ class AllNotesFragment : Fragment() {
     private val userRepository by lazy { UserRepository(this) }
     private val noteList = mutableListOf<Note>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         getNotes()
     }
 
@@ -70,9 +71,14 @@ class AllNotesFragment : Fragment() {
     }
 
     private fun setsUpRecyclerView() {
+        val adapter = NotesAdapter(requireContext(), noteList, true)
+        adapter.whenClickItem = { note ->
+            val action = NotesListFragmentDirections
+                .actionNotesListFragmentToAllNoteFragment(note)
+            findNavController().navigate(action)
+        }
         binding.recyclerviewNotesAllnotes.apply {
-            adapter = NotesAdapter(requireContext(), noteList, true)
-            setHasFixedSize(true)
+            this.adapter = adapter
             layoutManager = StaggeredGridLayoutManager(2, 1) // Orientation 0 = horizontal | 1 = vertical
         }
 

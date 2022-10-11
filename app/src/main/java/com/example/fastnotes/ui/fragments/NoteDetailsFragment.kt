@@ -7,30 +7,22 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.fastnotes.R
-import com.example.fastnotes.database.NOTE_PATH
-import com.example.fastnotes.databinding.FragmentAllNoteBinding
+import com.example.fastnotes.databinding.FragmentNoteDetailsBinding
 import com.example.fastnotes.extensions.tryLoadImage
 import com.example.fastnotes.model.Note
-import com.example.fastnotes.repositories.NoteRepository
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 
 
-class AllNoteFragment : Fragment() {
+class NoteDetailsFragment : Fragment() {
 
-    private val args: AllNoteFragmentArgs by navArgs()
-    private var _binding: FragmentAllNoteBinding? = null
+    private val args: NoteDetailsFragmentArgs by navArgs()
+    private var _binding: FragmentNoteDetailsBinding? = null
     private val binding get() = _binding!!
-    private val noteRepository by lazy { NoteRepository(this) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAllNoteBinding.inflate(inflater, container, false)
+        _binding = FragmentNoteDetailsBinding.inflate(inflater, container, false)
 
         return binding.root
     }

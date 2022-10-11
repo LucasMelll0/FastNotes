@@ -74,7 +74,7 @@ class AllNotesFragment : Fragment() {
         val adapter = NotesAdapter(requireContext(), noteList, true)
         adapter.whenClickItem = { note ->
             val action = NotesListFragmentDirections
-                .actionNotesListFragmentToAllNoteFragment(note)
+                .actionNotesListFragmentToNoteDetailsFragment(note)
             findNavController().navigate(action)
         }
         binding.recyclerviewNotesAllnotes.apply {

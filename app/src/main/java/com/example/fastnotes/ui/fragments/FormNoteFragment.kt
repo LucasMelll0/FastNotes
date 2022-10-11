@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.fastnotes.databinding.FragmentMyNoteBinding
+import com.example.fastnotes.databinding.FragmentFormNoteBinding
 import com.example.fastnotes.extensions.tryLoadImage
 import com.example.fastnotes.model.Note
 import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
 
 
-class MyNoteFragment : Fragment() {
+class FormNoteFragment : Fragment() {
 
-    private val args: MyNoteFragmentArgs by navArgs()
-    private var _binding: FragmentMyNoteBinding? = null
+    private val args: FormNoteFragmentArgs by navArgs()
+    private var _binding: FragmentFormNoteBinding? = null
     private val binding get() = _binding!!
     private val repository by lazy { NoteRepository(this) }
     private val userRepository by lazy { UserRepository(this) }
@@ -28,7 +28,7 @@ class MyNoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMyNoteBinding.inflate(inflater, container, false)
+        _binding = FragmentFormNoteBinding.inflate(inflater, container, false)
 
         return binding.root
     }

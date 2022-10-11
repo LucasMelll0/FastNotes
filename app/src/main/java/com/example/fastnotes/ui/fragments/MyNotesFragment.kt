@@ -77,7 +77,7 @@ class MyNotesFragment : Fragment() {
         val adapter = NotesAdapter(requireContext(), noteList, false)
         adapter.whenClickItem = { note ->
             val action = NotesListFragmentDirections
-                .actionNotesListFragmentToMyNoteFragment(note)
+                .actionNotesListFragmentToFormNoteFragment(note)
                 findNavController().navigate(action)
         }
         binding.recyclerviewNotesMynotes.setHasFixedSize(true)
@@ -87,7 +87,7 @@ class MyNotesFragment : Fragment() {
 
     private fun setsUpFabAddNote() {
         binding.fabAddNoteMyNotes.setOnClickListener {
-            NotesListFragmentDirections.actionNotesListFragmentToMyNoteFragment(null).apply {
+            NotesListFragmentDirections.actionNotesListFragmentToFormNoteFragment(null).apply {
                 findNavController().navigate(this)
             }
         }

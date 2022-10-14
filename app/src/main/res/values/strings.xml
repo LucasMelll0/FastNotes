@@ -34,4 +34,9 @@
     <string name="note_delet_success">The note was successfully deleted!!</string>
     <string name="error_on_delete_note">Error deleting note!!</string>
     <string name="error_loading_note">Error on loading note!!</string>
+    <string name="public_text">public:</string>
+    <string name="you_are_offline">You ar offline!!</string>
+    <string name="message_offline_sync_notes">You\'re offline, when connecting the sync of notes will be done!!</string>
+    <string name="message_sync_notes_successfull">All notes has been synchronized!!</string>
+    <string name="error_sync_notes">Error on sync notes!!</string>
 </resources>

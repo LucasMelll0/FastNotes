@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.fastnotes.R
+import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.database.DATABASE_ERROR
 import com.example.fastnotes.database.NOTE_PATH
 import com.example.fastnotes.databinding.FragmentAllNotesBinding
@@ -25,28 +26,33 @@ import com.google.firebase.database.ValueEventListener
 class AllNotesFragment : Fragment() {
 
     private val binding by lazy { FragmentAllNotesBinding.inflate(LayoutInflater.from(requireContext())) }
-    private val noteRepository by lazy { NoteRepository(this) }
+    private val noteRepository by lazy {
+        NoteRepository(
+            this,
+            AppDataBase.instance(requireContext()).noteDao()
+        )
+    }
     private val userRepository by lazy { UserRepository(this) }
     private val noteList = mutableListOf<Note>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getNotes()
+        /*getNotes()*/
     }
 
-    private fun getNotes() {
+    /*private fun getNotes() {
         userRepository.getUser()?.let {
             noteRepository
-                .database
+                .dbFirebase
                 .child(NOTE_PATH)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.exists()){
+                        if (snapshot.exists()) {
                             noteList.clear()
-                            for(snapUser in snapshot.children){
-                                if (snapUser.exists()){
-                                    for (snapNote in snapUser.children){
-                                        if(snapNote.exists()){
+                            for (snapUser in snapshot.children) {
+                                if (snapUser.exists()) {
+                                    for (snapNote in snapUser.children) {
+                                        if (snapNote.exists()) {
                                             val note = snapNote.getValue(Note::class.java) as Note
                                             noteList.add(note)
                                         }
@@ -57,6 +63,7 @@ class AllNotesFragment : Fragment() {
                             setsUpRecyclerView()
                         }
                     }
+
                     override fun onCancelled(error: DatabaseError) {
                         Log.e(DATABASE_ERROR, "onCancelled: $error")
                         Snackbar.make(
@@ -68,7 +75,7 @@ class AllNotesFragment : Fragment() {
 
                 })
         }
-    }
+    }*/
 
     private fun setsUpRecyclerView() {
         val adapter = NotesAdapter(requireContext(), noteList, true)
@@ -79,7 +86,8 @@ class AllNotesFragment : Fragment() {
         }
         binding.recyclerviewNotesAllnotes.apply {
             this.adapter = adapter
-            layoutManager = StaggeredGridLayoutManager(2, 1) // Orientation 0 = horizontal | 1 = vertical
+            layoutManager =
+                StaggeredGridLayoutManager(2, 1) // Orientation 0 = horizontal | 1 = vertical
         }
 
     }

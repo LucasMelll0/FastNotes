@@ -5,13 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.databinding.FragmentFormNoteBinding
 import com.example.fastnotes.extensions.tryLoadImage
 import com.example.fastnotes.model.Note
 import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 
 class FormNoteFragment : Fragment() {
@@ -19,9 +23,17 @@ class FormNoteFragment : Fragment() {
     private val args: FormNoteFragmentArgs by navArgs()
     private var _binding: FragmentFormNoteBinding? = null
     private val binding get() = _binding!!
-    private val repository by lazy { NoteRepository(this) }
+    private val repository by lazy {
+        NoteRepository(
+            this,
+            AppDataBase
+                .instance(requireContext())
+                .noteDao()
+        )
+    }
     private val userRepository by lazy { UserRepository(this) }
     private var noteId: String? = null
+    private var noteKey: String? = null
 
 
     override fun onCreateView(
@@ -44,7 +56,10 @@ class FormNoteFragment : Fragment() {
     private fun setsUpFabDelete() {
         binding.fabDeleteNoteFragment.setOnClickListener {
             noteId?.let { id ->
-                repository.removeNote(id)
+                lifecycleScope.launch {
+                    val note = createNote()
+                    repository.remove(note)
+                }
             } ?: findNavController().popBackStack()
         }
     }
@@ -59,9 +74,10 @@ class FormNoteFragment : Fragment() {
     private fun fillFields(note: Note) {
         binding.apply {
             noteId = note.id
-            imageviewNoteActivity.tryLoadImage(note.image)
-            textinputTitleNoteActivity.editText?.setText(note.title)
-            textinputDescriptionNoteActivity.editText?.setText(note.description)
+            noteKey = note.key
+            imageviewInputNoteFragment.tryLoadImage(note.image)
+            textinputTitleInputNoteFragment.editText?.setText(note.title)
+            textinputDescriptionInputNoteFragment.editText?.setText(note.description)
         }
     }
 
@@ -75,18 +91,23 @@ class FormNoteFragment : Fragment() {
         binding.imagebuttonConfirmNoteActivity.setOnClickListener {
             if (titleNotEmpty()) {
                 val note = createNote()
-                repository.saveNote(note)
+                lifecycleScope.launch {
+                    noteId?.let {
+                        repository.update(note)
+                    } ?: repository.save(note)
+                }
             }
         }
     }
 
     private fun createNote(): Note {
         binding.apply {
-            val title = textinputTitleNoteActivity.editText!!.text.toString().trim()
-            val description = textinputDescriptionNoteActivity.editText!!.text.toString().trim()
+            val title = textinputTitleInputNoteFragment.editText!!.text.toString().trim()
+            val description = textinputDescriptionInputNoteFragment.editText!!.text.toString().trim()
             return if (noteId != null) {
                 Note(
                     id = noteId!!,
+                    key = noteKey!!,
                     user = userRepository.getUser()?.displayName.toString(),
                     userId = userRepository.getUser()!!.uid,
                     title = title,
@@ -104,7 +125,7 @@ class FormNoteFragment : Fragment() {
     }
 
     private fun titleNotEmpty(): Boolean =
-        binding.textinputTitleNoteActivity.editText!!.text.isNotEmpty()
+        binding.textinputTitleInputNoteFragment.editText!!.text.isNotEmpty()
 
 
 }

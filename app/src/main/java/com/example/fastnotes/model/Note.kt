@@ -23,7 +23,8 @@ data class Note(
     @ColumnInfo(defaultValue = "0")
     var synchronized: Boolean = false,
     @ColumnInfo(defaultValue = "0")
-    var disabled: Boolean = false
+    var disabled: Boolean = false,
+    var key: String = ""
 ): Parcelable{
 
 }

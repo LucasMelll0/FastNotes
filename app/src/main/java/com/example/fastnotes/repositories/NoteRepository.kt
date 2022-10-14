@@ -1,86 +1,115 @@
 package com.example.fastnotes.repositories
 
+import android.util.Log
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.example.fastnotes.R
-import com.example.fastnotes.database.NOTE_PATH
+import com.example.fastnotes.database.dao.NoteDao
+import com.example.fastnotes.database.firebase.FirebaseDatabaseHelper
 import com.example.fastnotes.model.Note
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 
 class NoteRepository(
     private val fragment: Fragment,
+    private val dao: NoteDao
 ) {
 
-    val database = FirebaseDatabase.getInstance().reference
-    private val currentUser = FirebaseAuth.getInstance().currentUser
+    private val dbFirebase = FirebaseDatabaseHelper(
+        fragment,
+        dao
+    )
 
 
-    fun saveNote(note: Note) {
-        currentUser?.let {
-            database
-                .child(NOTE_PATH)
-                .child(it.uid)
-                .child(note.id)
-                .setValue(note)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        fragment.findNavController().popBackStack()
-                        Snackbar.make(
-                            fragment.requireView(),
-                            fragment.getString(R.string.succesfull_not_save),
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+    suspend fun save(note: Note) {
+        dao.save(note)
+        dbFirebase.save(note)
+    }
+
+    suspend fun update(note: Note) {
+        dao.save(note)
+        val updateMap = HashMap<String, HashMap<String, Note>>()
+        val noteMap = HashMap<String, Note>()
+        noteMap[note.id] = note
+        updateMap[note.key] = noteMap
+        dbFirebase.update(updateMap)
+    }
+
+    suspend fun trySyncNotes() {
+        dao.getAllDisabled().first().let { notes ->
+            if (notes.isNotEmpty()) {
+                val notesForDelete = HashMap<String, HashMap<String, Note?>>()
+                for (note in notes) {
+                    notesForDelete[note.key] ?: run {
+                        val notesWithSameKey = dao.getAllByKey(note.key)
+                        val notesSameKeyMap = HashMap<String, Note?>()
+                        for (noteSameKey in notesWithSameKey){
+                            when(noteSameKey.disabled){
+                                true -> {
+                                    notesSameKeyMap[noteSameKey.id] = null
+                                }
+                                false -> {
+                                    notesSameKeyMap[noteSameKey.id] = noteSameKey
+                                }
+                            }
+                        }
+                        notesForDelete[note.key] = notesSameKeyMap
+                    }
+                }
+                dbFirebase.remove(notesForDelete)
+            }
+        }
+        dao.getNotSynchronized().first().let { notes ->
+            if (notes.isNotEmpty()) {
+                val newNotesMap = HashMap<String, Note>()
+                val notesForUpdateMap = HashMap<String, HashMap<String, Note>>()
+                for (note in notes) {
+                    if (note.key.isNotEmpty()) {
+                        getNotSyncUpdates(notesForUpdateMap, note.key)
                     } else {
-                        Snackbar.make(
-                            fragment.requireView(),
-                            fragment.getString(R.string.error_save_note),
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                        newNotesMap[note.id] = note
                     }
-                }.addOnFailureListener {
-                    Snackbar.make(
-                        fragment.requireView(),
-                        fragment.getString(R.string.error_save_note),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
                 }
+                Log.i("Teste de notas para atualizar", "trySyncNotes: $notesForUpdateMap")
+                dbFirebase.update(notesForUpdateMap)
+                dbFirebase.save(newNotesMap)
+            }
         }
     }
 
-    fun removeNote(id: String) {
-        currentUser?.let { user ->
-            database
-                .child(NOTE_PATH)
-                .child(user.uid)
-                .child(id)
-                .removeValue()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful){
-                        fragment.findNavController().popBackStack()
-                        Snackbar.make(
-                            fragment.requireView(),
-                            fragment.getString(R.string.note_delet_success),
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                    }else{
-                        Snackbar.make(
-                            fragment.requireView(),
-                            fragment.getString(R.string.error_on_delete_note),
-                            Snackbar.LENGTH_LONG
-                        ).show()
-                    }
+    private suspend fun getNotSyncUpdates(
+        notesForUpdateMap: HashMap<String, HashMap<String, Note>>,
+        key: String
+    ) {
+        val notesWithSameKey = dao.getAllByKey(key)
+        val notesSameKeyMap = HashMap<String, Note>()
+        for (noteSameKey in notesWithSameKey) {
+            notesSameKeyMap[noteSameKey.id] = noteSameKey
+        }
+        notesForUpdateMap[key] = notesSameKeyMap
 
-                }
-                .addOnFailureListener {
-                    Snackbar.make(
-                        fragment.requireView(),
-                        fragment.getString(R.string.error_on_delete_note),
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
+    }
+
+
+    fun getUserNotes() = dao.getAll()
+
+    fun getById(id: String): Flow<Note> {
+        return dao.getById(id)
+    }
+
+    suspend fun remove(note: Note) {
+        dao.disable(note.id)
+        if (note.key.isNotEmpty()) {
+            val notesWithSameKey = dao.getAllByKey(note.key)
+            val noteForDeleteMap = HashMap<String, HashMap<String, Note?>>()
+            val noteMap = HashMap<String, Note?>()
+            for (noteSameKey in notesWithSameKey) {
+                noteMap[noteSameKey.id] = noteSameKey
+            }
+            noteMap[note.id] = null
+            noteForDeleteMap[note.key] = noteMap
+            dbFirebase.remove(noteForDeleteMap)
         }
     }
+
+
 }

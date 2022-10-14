@@ -8,7 +8,7 @@ import com.example.fastnotes.database.dao.NoteDao
 import com.example.fastnotes.model.Note
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [Note::class],
     exportSchema = true
 )
@@ -28,7 +28,8 @@ abstract class AppDataBase : RoomDatabase() {
                 context,
                 AppDataBase::class.java,
                 DATABASE_NAME
-            ).build()
+            ).fallbackToDestructiveMigration()
+                .build()
         }
     }
 }

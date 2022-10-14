@@ -35,4 +35,7 @@ interface NoteDao {
 
     @Query("SELECT * FROM Note WHERE disabled = 1")
     fun getAllDisabled(): Flow<List<Note>>
+
+    @Query("SELECT * FROM Note WHERE `key` = :key")
+    suspend fun getAllByKey(key: String): List<Note>
 }

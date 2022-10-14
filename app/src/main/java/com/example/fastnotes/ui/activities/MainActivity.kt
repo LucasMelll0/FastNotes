@@ -6,7 +6,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.example.fastnotes.R
 import com.example.fastnotes.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }

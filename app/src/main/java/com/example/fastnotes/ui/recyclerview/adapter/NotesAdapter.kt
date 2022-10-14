@@ -63,6 +63,13 @@ class NotesAdapter(
 
     override fun getItemCount(): Int = dataSet.size
 
+    fun update(notes: List<Note>){
+        notifyItemRangeRemoved(0, this.dataSet.size)
+        dataSet.clear()
+        dataSet.addAll(notes)
+        notifyItemInserted(this.dataSet.size)
+    }
+
 
 
 }

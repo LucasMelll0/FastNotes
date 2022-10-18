@@ -31,10 +31,10 @@ interface NoteDao {
     suspend fun disable(id: String)
 
     @Query("SELECT * FROM Note WHERE synchronized = 0")
-    fun getNotSynchronized(): Flow<List<Note>>
+    suspend fun getNotSynchronized(): List<Note>
 
     @Query("SELECT * FROM Note WHERE disabled = 1")
-    fun getAllDisabled(): Flow<List<Note>>
+    suspend fun getAllDisabled(): List<Note>
 
     @Query("SELECT * FROM Note WHERE `key` = :key")
     suspend fun getAllByKey(key: String): List<Note>

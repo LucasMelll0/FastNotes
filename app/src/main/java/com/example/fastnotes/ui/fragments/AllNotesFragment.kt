@@ -12,6 +12,7 @@ import com.example.fastnotes.R
 import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.database.DATABASE_ERROR
 import com.example.fastnotes.database.NOTE_PATH
+import com.example.fastnotes.database.firebase.FirebaseDatabaseHelper
 import com.example.fastnotes.databinding.FragmentAllNotesBinding
 import com.example.fastnotes.model.Note
 import com.example.fastnotes.repositories.NoteRepository
@@ -37,12 +38,12 @@ class AllNotesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*getNotes()*/
+        getNotes()
     }
 
-    /*private fun getNotes() {
+    private fun getNotes() {
         userRepository.getUser()?.let {
-            noteRepository
+            FirebaseDatabaseHelper
                 .dbFirebase
                 .child(NOTE_PATH)
                 .addValueEventListener(object : ValueEventListener {
@@ -51,10 +52,14 @@ class AllNotesFragment : Fragment() {
                             noteList.clear()
                             for (snapUser in snapshot.children) {
                                 if (snapUser.exists()) {
-                                    for (snapNote in snapUser.children) {
-                                        if (snapNote.exists()) {
-                                            val note = snapNote.getValue(Note::class.java) as Note
-                                            noteList.add(note)
+                                    for (snapKey in snapUser.children) {
+                                        if (snapKey.exists()) {
+                                            for (snapNote in snapKey.children){
+                                                if (snapNote.exists()){
+                                                    val note = snapNote.getValue(Note::class.java) as Note
+                                                    if (note.public) noteList.add(note)
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -75,7 +80,7 @@ class AllNotesFragment : Fragment() {
 
                 })
         }
-    }*/
+    }
 
     private fun setsUpRecyclerView() {
         val adapter = NotesAdapter(requireContext(), noteList, true)

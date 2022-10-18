@@ -7,19 +7,29 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
+import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.databinding.FragmentNotesListBinding
+import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
 import com.example.fastnotes.ui.viewpager.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.launch
 
 class NotesListFragment : Fragment() {
 
     private var _binding: FragmentNotesListBinding? = null
     private val binding get() = _binding!!
     private val repository by lazy { UserRepository(this) }
+    private val notesRepository by lazy {
+        NoteRepository(
+            this,
+            AppDataBase.instance(requireContext()).noteDao()
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +49,9 @@ class NotesListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setsUpOnBackPressed()
+        lifecycleScope.launch {
+            notesRepository.trySyncNotes()
+        }
     }
 
     private fun setsUpOnBackPressed() {

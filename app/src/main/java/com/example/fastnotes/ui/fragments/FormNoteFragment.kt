@@ -14,7 +14,6 @@ import com.example.fastnotes.extensions.tryLoadImage
 import com.example.fastnotes.model.Note
 import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
@@ -55,10 +54,11 @@ class FormNoteFragment : Fragment() {
 
     private fun setsUpFabDelete() {
         binding.fabDeleteNoteFragment.setOnClickListener {
-            noteId?.let { id ->
+            noteId?.let {
                 lifecycleScope.launch {
                     val note = createNote()
                     repository.remove(note)
+                    findNavController().popBackStack()
                 }
             } ?: findNavController().popBackStack()
         }
@@ -94,7 +94,11 @@ class FormNoteFragment : Fragment() {
                 lifecycleScope.launch {
                     noteId?.let {
                         repository.update(note)
-                    } ?: repository.save(note)
+                        findNavController().popBackStack()
+                    } ?: run {
+                        repository.save(note)
+                        findNavController().popBackStack()
+                    }
                 }
             }
         }
@@ -103,7 +107,9 @@ class FormNoteFragment : Fragment() {
     private fun createNote(): Note {
         binding.apply {
             val title = textinputTitleInputNoteFragment.editText!!.text.toString().trim()
-            val description = textinputDescriptionInputNoteFragment.editText!!.text.toString().trim()
+            val description =
+                textinputDescriptionInputNoteFragment.editText!!.text.toString().trim()
+            val public = switchPublicInputNoteFragment.isChecked
             return if (noteId != null) {
                 Note(
                     id = noteId!!,
@@ -111,14 +117,16 @@ class FormNoteFragment : Fragment() {
                     user = userRepository.getUser()?.displayName.toString(),
                     userId = userRepository.getUser()!!.uid,
                     title = title,
-                    description = description
+                    description = description,
+                    public = public
                 )
             } else {
                 Note(
                     user = userRepository.getUser()?.displayName.toString(),
                     userId = userRepository.getUser()!!.uid,
                     title = title,
-                    description = description
+                    description = description,
+                    public = public
                 )
             }
         }

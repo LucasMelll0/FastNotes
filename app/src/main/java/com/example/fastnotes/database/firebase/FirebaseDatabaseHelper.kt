@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 
 class FirebaseDatabaseHelper(
     private val fragment: Fragment,
@@ -27,15 +28,16 @@ class FirebaseDatabaseHelper(
 
     }
 
-    private fun checkConnection() {
+    private fun checkConnection(): Boolean {
         val context = fragment.requireContext()
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val network = connectivityManager.activeNetwork
-        network ?: return
-        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return
 
-        connected = when {
+        val network = connectivityManager.activeNetwork ?: return false
+
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return when {
             activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
                 true
             }
@@ -46,13 +48,13 @@ class FirebaseDatabaseHelper(
                 false
             }
         }
-        Log.i("Firebase", "checkConnection: connection = $connected")
     }
 
     private val currentUser = FirebaseAuth.getInstance().currentUser
 
     fun save(note: Note) {
-        checkConnection()
+        connected = checkConnection()
+        Log.i("Firebase", "checkConnection: connection = $connected")
         if (connected) {
             currentUser?.let { user ->
                 val userIdRef = dbFirebase.child(NOTE_PATH).child(user.uid).push()
@@ -83,43 +85,61 @@ class FirebaseDatabaseHelper(
                         ).show()
                     }
             }
+            return
         } else {
             Snackbar.make(
                 fragment.requireView(),
                 fragment.getString(R.string.message_offline_sync_notes),
                 5000
             ).show()
-            fragment.findNavController().popBackStack()
+            return
         }
     }
 
     fun save(notes: HashMap<String, Note>) {
-        checkConnection()
+        connected = checkConnection()
+        Log.i("Firebase Save", "checkConnection: connection = $connected")
         if (connected) {
-            currentUser?.let { user ->
-                val userIdRef = dbFirebase.child(NOTE_PATH).child(user.uid).push()
-                val notesMap = HashMap<String, Note>()
-                for ((key, value) in notes) {
-                    val noteWithKey = value.copy(key = userIdRef.key!!)
-                    notesMap[key] = noteWithKey
-                }
-                userIdRef
-                    .setValue(notesMap)
-                    .addOnSuccessListener {
-                        Snackbar.make(
-                            fragment.requireView(),
-                            fragment.getString(R.string.message_sync_notes_successfull),
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                        updateOnLocalDataBase(notesMap)
+                currentUser?.let { user ->
+                    val userIdRef = dbFirebase.child(NOTE_PATH).child(user.uid).push()
+                    val pushKey = userIdRef.key!!
+                    val notesMap = HashMap<String, Note>()
+                    for ((key, value) in notes) {
+                        val noteWithKey = value.copy(key = pushKey)
+                        notesMap[key] = noteWithKey
                     }
-            }
+                    val saveHashMap = HashMap<String, HashMap<String, Note>>()
+                    saveHashMap[userIdRef.key!!] = notesMap
+                    userIdRef
+                        .setValue(notesMap)
+                        .addOnCompleteListener {
+                            if (it.isSuccessful){
+                                Snackbar.make(
+                                    fragment.requireView(),
+                                    fragment.getString(R.string.message_sync_notes_successfull),
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
+                                updateOnLocalDataBase(notesMap)
+                                return@addOnCompleteListener
+                            }else{
+                                Snackbar.make(
+                                    fragment.requireView(),
+                                    fragment.getString(R.string.message_offline_sync_notes),
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                                return@addOnCompleteListener
+                            }
+                        }
+
+                }
+            return
         } else {
             Snackbar.make(
                 fragment.requireView(),
                 fragment.getString(R.string.message_offline_sync_notes),
                 Snackbar.LENGTH_LONG
             ).show()
+            return
         }
 
     }
@@ -143,7 +163,8 @@ class FirebaseDatabaseHelper(
     }
 
     fun remove(notes: HashMap<String, HashMap<String, Note?>>) {
-        checkConnection()
+        connected = checkConnection()
+        Log.i("Firebase", "checkConnection: connection = $connected")
         if (connected) {
             currentUser?.let { user ->
                 dbFirebase
@@ -182,12 +203,21 @@ class FirebaseDatabaseHelper(
                         ).show()
                     }
             }
+            return
+        }else{
+            Snackbar.make(
+                fragment.requireView(),
+                fragment.getString(R.string.message_offline_sync_notes),
+                Snackbar.LENGTH_LONG
+            ).show()
+            return
         }
     }
 
 
     fun update(update: HashMap<String, HashMap<String, Note>>) {
-        checkConnection()
+        connected = checkConnection()
+        Log.i("Firebase", "checkConnection: connection = $connected")
         if (connected) {
             currentUser?.let { user ->
                 dbFirebase
@@ -221,14 +251,14 @@ class FirebaseDatabaseHelper(
                         ).show()
                     }
             }
+            return
         } else {
             Snackbar.make(
                 fragment.requireView(),
                 fragment.getString(R.string.message_offline_sync_notes),
                 5000
             ).show()
-            fragment.findNavController().popBackStack()
+            return
         }
     }
-
 }

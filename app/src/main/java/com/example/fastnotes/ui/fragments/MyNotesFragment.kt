@@ -1,6 +1,7 @@
 package com.example.fastnotes.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,51 +41,59 @@ class MyNotesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setsUpFabAddNote()
-        setsUpRecyclerView()
+
         lifecycleScope.launch {
             launch {
-                syncNotes()
-            }
-            launch {
-                repeatOnLifecycle(Lifecycle.State.RESUMED){
+                repeatOnLifecycle(Lifecycle.State.RESUMED) {
                     getNotes()
                 }
             }
         }
     }
 
-    private suspend fun syncNotes() {
-        repository.trySyncNotes()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setsUpFabAddNote()
+        setsUpRecyclerView()
     }
 
 
     private fun setsUpRecyclerView() {
+        binding.recyclerviewNotesMynotes.adapter = adapter
+        binding.recyclerviewNotesMynotes.setHasFixedSize(true)
+        binding.recyclerviewNotesMynotes.layoutManager = StaggeredGridLayoutManager(2, 1)
+        setsUpAdapterFunctions()
+        setsUpSwipeRefresh()
+    }
+
+    private fun setsUpAdapterFunctions() {
         adapter.whenClickItem = { note ->
             val action = NotesListFragmentDirections
                 .actionNotesListFragmentToFormNoteFragment(note)
             findNavController().navigate(action)
         }
-        binding.recyclerviewNotesMynotes.setHasFixedSize(true)
-        binding.recyclerviewNotesMynotes.layoutManager = StaggeredGridLayoutManager(2, 1)
-        binding.recyclerviewNotesMynotes.adapter = adapter
-        setsUpSwipeRefresh()
     }
 
     private fun setsUpSwipeRefresh() {
         val swipe = binding.swipeRefreshUserNotes
         swipe.setOnRefreshListener {
+            Log.i("Testes Refresh", "setsUpSwipeRefresh: repetiu")
             lifecycleScope.launch {
-                syncNotes()
-                swipe.isRefreshing = false
+                launch {
+                    repository.trySyncNotes()
+                }
+                launch {
+                    swipe.isRefreshing = false
+                }
             }
         }
     }
 
     private suspend fun getNotes() {
-        repository.getUserNotes().collect{ notes ->
-            adapter.update(notes)
-        }
+        repository.getUserNotes()
+            .collect { notes ->
+                adapter.update(notes)
+            }
     }
 
     private fun setsUpFabAddNote() {

@@ -1,20 +1,17 @@
 package com.example.fastnotes.repositories
 
-import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.fastnotes.database.dao.NoteDao
 import com.example.fastnotes.database.firebase.FirebaseDatabaseHelper
 import com.example.fastnotes.model.Note
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 
 
 class NoteRepository(
-    private val fragment: Fragment,
+    fragment: Fragment,
     private val dao: NoteDao
 ) {
 
-    private val dbFirebase = FirebaseDatabaseHelper(
+    val dbFirebase = FirebaseDatabaseHelper(
         fragment,
         dao
     )
@@ -35,15 +32,15 @@ class NoteRepository(
     }
 
     suspend fun trySyncNotes() {
-        dao.getAllDisabled().first().let { notes ->
+        dao.getAllDisabled().let { notes ->
             if (notes.isNotEmpty()) {
                 val notesForDelete = HashMap<String, HashMap<String, Note?>>()
                 for (note in notes) {
                     notesForDelete[note.key] ?: run {
                         val notesWithSameKey = dao.getAllByKey(note.key)
                         val notesSameKeyMap = HashMap<String, Note?>()
-                        for (noteSameKey in notesWithSameKey){
-                            when(noteSameKey.disabled){
+                        for (noteSameKey in notesWithSameKey) {
+                            when (noteSameKey.disabled) {
                                 true -> {
                                     notesSameKeyMap[noteSameKey.id] = null
                                 }
@@ -58,7 +55,7 @@ class NoteRepository(
                 dbFirebase.remove(notesForDelete)
             }
         }
-        dao.getNotSynchronized().first().let { notes ->
+        dao.getNotSynchronized().let { notes ->
             if (notes.isNotEmpty()) {
                 val newNotesMap = HashMap<String, Note>()
                 val notesForUpdateMap = HashMap<String, HashMap<String, Note>>()
@@ -69,10 +66,14 @@ class NoteRepository(
                         newNotesMap[note.id] = note
                     }
                 }
-                Log.i("Teste de notas para atualizar", "trySyncNotes: $notesForUpdateMap")
-                dbFirebase.update(notesForUpdateMap)
-                dbFirebase.save(newNotesMap)
+                if (notesForUpdateMap.isNotEmpty()) {
+                    dbFirebase.update(notesForUpdateMap)
+                }
+                if (newNotesMap.isNotEmpty()) {
+                    dbFirebase.save(newNotesMap)
+                }
             }
+
         }
     }
 
@@ -92,9 +93,6 @@ class NoteRepository(
 
     fun getUserNotes() = dao.getAll()
 
-    fun getById(id: String): Flow<Note> {
-        return dao.getById(id)
-    }
 
     suspend fun remove(note: Note) {
         dao.disable(note.id)

@@ -1,17 +1,19 @@
 package com.example.fastnotes.repositories
 
 import androidx.fragment.app.Fragment
+import com.example.fastnotes.R
 import com.example.fastnotes.database.dao.NoteDao
 import com.example.fastnotes.database.firebase.FirebaseDatabaseHelper
 import com.example.fastnotes.model.Note
+import com.google.android.material.snackbar.Snackbar
 
 
 class NoteRepository(
-    fragment: Fragment,
+    private val fragment: Fragment,
     private val dao: NoteDao
 ) {
 
-    val dbFirebase = FirebaseDatabaseHelper(
+    private val dbFirebase = FirebaseDatabaseHelper(
         fragment,
         dao
     )
@@ -19,11 +21,25 @@ class NoteRepository(
 
     suspend fun save(note: Note) {
         dao.save(note)
+        Snackbar.make(
+            fragment.requireView(),
+            fragment.getString(R.string.succesfull_not_save),
+            Snackbar.LENGTH_SHORT
+        ).show()
         dbFirebase.save(note)
     }
 
     suspend fun update(note: Note) {
         dao.save(note)
+        Snackbar.make(
+            fragment.requireView(),
+            fragment.getString(R.string.succesfull_not_save),
+            Snackbar.LENGTH_SHORT
+        ).show()
+        updateOnFirebase(note)
+    }
+
+    private fun updateOnFirebase(note: Note) {
         val updateMap = HashMap<String, HashMap<String, Note>>()
         val noteMap = HashMap<String, Note>()
         noteMap[note.id] = note
@@ -96,6 +112,11 @@ class NoteRepository(
 
     suspend fun remove(note: Note) {
         dao.disable(note.id)
+        Snackbar.make(
+            fragment.requireView(),
+            fragment.getString(R.string.note_delet_success),
+            Snackbar.LENGTH_SHORT
+        ).show()
         if (note.key.isNotEmpty()) {
             val notesWithSameKey = dao.getAllByKey(note.key)
             val noteForDeleteMap = HashMap<String, HashMap<String, Note?>>()

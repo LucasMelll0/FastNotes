@@ -44,6 +44,7 @@ class NotesListFragment : Fragment() {
         setsUpToolbar()
         setsUpTabLayout()
 
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +54,7 @@ class NotesListFragment : Fragment() {
             notesRepository.trySyncNotes()
         }
     }
+
 
     private fun setsUpOnBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(this) {

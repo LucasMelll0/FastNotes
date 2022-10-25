@@ -41,7 +41,6 @@ class MyNotesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         lifecycleScope.launch {
             launch {
                 repeatOnLifecycle(Lifecycle.State.RESUMED) {
@@ -77,7 +76,6 @@ class MyNotesFragment : Fragment() {
     private fun setsUpSwipeRefresh() {
         val swipe = binding.swipeRefreshUserNotes
         swipe.setOnRefreshListener {
-            Log.i("Testes Refresh", "setsUpSwipeRefresh: repetiu")
             lifecycleScope.launch {
                 launch {
                     repository.trySyncNotes()

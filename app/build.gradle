@@ -7,7 +7,7 @@ plugins {
     id 'kotlin-parcelize'
 }
 android {
-    compileSdk 33
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.example.fastnotes"
@@ -73,7 +73,10 @@ dependencies {
     //Swipe Refresh
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
-    implementation 'androidx.core:core-ktx:1.9.0'
+    //Material Design
+    implementation 'com.google.android.material:material:1.6.1'
+
+    implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

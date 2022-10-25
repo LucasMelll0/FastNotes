@@ -8,13 +8,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.fastnotes.R
 import com.example.fastnotes.database.AppDataBase
+import com.example.fastnotes.databinding.ConfirmationBottomSheetBinding
 import com.example.fastnotes.databinding.FragmentFormNoteBinding
+import com.example.fastnotes.extensions.showDialog
 import com.example.fastnotes.extensions.tryLoadImage
 import com.example.fastnotes.model.Note
 import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
+import com.example.fastnotes.ui.dialogs.FormImageDialog
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
+
 
 
 class FormNoteFragment : Fragment() {
@@ -33,6 +40,7 @@ class FormNoteFragment : Fragment() {
     private val userRepository by lazy { UserRepository(this) }
     private var noteId: String? = null
     private var noteKey: String? = null
+    private var image: String? = null
 
 
     override fun onCreateView(
@@ -48,19 +56,36 @@ class FormNoteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setsUpSaveButton()
         setsUpBackButton()
+        setsUpFabImage()
         checkHasArgs()
 
     }
 
+
+    private fun setsUpFabImage() {
+        binding.fabAddImage.setOnClickListener {
+            FormImageDialog(requireContext()).show(image) { url ->
+                image = url
+                image?.let {
+                    binding.imageviewInputNoteFragment.tryLoadImage(it)
+                    binding.cardviewImageview.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
     private fun setsUpFabDelete() {
         binding.fabDeleteNoteFragment.setOnClickListener {
-            noteId?.let {
-                lifecycleScope.launch {
-                    val note = createNote()
-                    repository.remove(note)
-                    findNavController().popBackStack()
-                }
-            } ?: findNavController().popBackStack()
+            showDialog {
+                noteId?.let {
+                    lifecycleScope.launch {
+                        val note = createNote()
+                        repository.remove(note)
+                        findNavController().navigate(R.id.action_formNoteFragment_to_notesListFragment)
+                    }
+                } ?: findNavController().popBackStack()
+            }
+
         }
     }
 
@@ -75,6 +100,7 @@ class FormNoteFragment : Fragment() {
         binding.apply {
             noteId = note.id
             noteKey = note.key
+            image = note.image
             imageviewInputNoteFragment.tryLoadImage(note.image)
             textinputTitleInputNoteFragment.editText?.setText(note.title)
             textinputDescriptionInputNoteFragment.editText?.setText(note.description)
@@ -94,10 +120,10 @@ class FormNoteFragment : Fragment() {
                 lifecycleScope.launch {
                     noteId?.let {
                         repository.update(note)
-                        findNavController().popBackStack()
+                        findNavController().navigate(R.id.action_formNoteFragment_to_notesListFragment)
                     } ?: run {
                         repository.save(note)
-                        findNavController().popBackStack()
+                        findNavController().navigate(R.id.action_formNoteFragment_to_notesListFragment)
                     }
                 }
             }
@@ -114,6 +140,7 @@ class FormNoteFragment : Fragment() {
                 Note(
                     id = noteId!!,
                     key = noteKey!!,
+                    image = image ?: "",
                     user = userRepository.getUser()?.displayName.toString(),
                     userId = userRepository.getUser()!!.uid,
                     title = title,
@@ -122,6 +149,7 @@ class FormNoteFragment : Fragment() {
                 )
             } else {
                 Note(
+                    image = image ?: "",
                     user = userRepository.getUser()?.displayName.toString(),
                     userId = userRepository.getUser()!!.uid,
                     title = title,

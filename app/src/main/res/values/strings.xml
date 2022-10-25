@@ -39,4 +39,10 @@
     <string name="message_offline_sync_notes">You\'re offline, when connecting the sync of notes will be done!!</string>
     <string name="message_sync_notes_successfull">All notes has been synchronized!!</string>
     <string name="error_sync_notes">Error on sync notes!!</string>
+    <string name="load">LOAD</string>
+    <string name="link">Link</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="delete_user_confirmation_question">Really want to delete the user?</string>
+    <string name="confirmation_question_delete_note">Really want to delete this note?</string>
 </resources>

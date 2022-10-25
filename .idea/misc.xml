@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/drawable/button_animation.xml" value="0.136" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/drawable/button_state_pressed.xml" value="0.136" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/drawable/ic_exit.xml" value="0.1935" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/drawable/ic_user.xml" value="0.1935" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/drawable/rounded_background.xml" value="0.1035" />
@@ -21,11 +23,13 @@
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_my_note.xml" value="0.25" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_my_notes.xml" value="0.176" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_note.xml" value="0.25" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_note_details.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_notes_list.xml" value="0.25" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_register.xml" value="0.2359375" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/image_form_dialog.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/my_note_list_item.xml" value="0.2" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/note_list_item.xml" value="0.2" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/menu/note_list_menu.xml" value="0.25" />
       </map>
     </option>
   </component>

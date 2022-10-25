@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.databinding.FragmentMyNotesBinding
+import com.example.fastnotes.extensions.showDialog
 import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.ui.recyclerview.adapter.NotesAdapter
 import kotlinx.coroutines.launch
@@ -71,6 +72,15 @@ class MyNotesFragment : Fragment() {
                 .actionNotesListFragmentToFormNoteFragment(note)
             findNavController().navigate(action)
         }
+        adapter.whenClickDelete = { note ->
+            showDialog {
+            lifecycleScope.launch {
+                binding.progressbarMyNotesFragment.visibility = View.VISIBLE
+                repository.remove(note)
+                binding.progressbarMyNotesFragment.visibility = View.GONE
+            }
+            }
+        }
     }
 
     private fun setsUpSwipeRefresh() {
@@ -88,9 +98,11 @@ class MyNotesFragment : Fragment() {
     }
 
     private suspend fun getNotes() {
+        binding.progressbarMyNotesFragment.visibility = View.VISIBLE
         repository.getUserNotes()
             .collect { notes ->
                 adapter.update(notes)
+                binding.progressbarMyNotesFragment.visibility = View.GONE
             }
     }
 

@@ -47,7 +47,10 @@ class NoteDetailsFragment : Fragment() {
 
     private fun fiilFields(note: Note) {
         binding.apply {
-            imageviewAllNoteFragment.tryLoadImage(note.image)
+            if (note.image.isNotEmpty()){
+                imageviewAllNoteFragment.tryLoadImage(note.image)
+                cardviewImageview.visibility = View.VISIBLE
+            }
             textviewTitleAllNote.text = note.title
             textviewUserNameAllNote.text = note.user
             textviewDescriptionAllNote.text = note.description

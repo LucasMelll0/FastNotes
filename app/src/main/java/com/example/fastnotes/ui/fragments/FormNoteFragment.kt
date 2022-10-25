@@ -41,6 +41,7 @@ class FormNoteFragment : Fragment() {
     private var noteId: String? = null
     private var noteKey: String? = null
     private var image: String? = null
+    private var public: Boolean? = null
 
 
     override fun onCreateView(
@@ -101,6 +102,7 @@ class FormNoteFragment : Fragment() {
             noteId = note.id
             noteKey = note.key
             image = note.image
+            switchPublicInputNoteFragment.isChecked = note.public
             imageviewInputNoteFragment.tryLoadImage(note.image)
             textinputTitleInputNoteFragment.editText?.setText(note.title)
             textinputDescriptionInputNoteFragment.editText?.setText(note.description)
@@ -135,7 +137,7 @@ class FormNoteFragment : Fragment() {
             val title = textinputTitleInputNoteFragment.editText!!.text.toString().trim()
             val description =
                 textinputDescriptionInputNoteFragment.editText!!.text.toString().trim()
-            val public = switchPublicInputNoteFragment.isChecked
+            public = switchPublicInputNoteFragment.isChecked
             return if (noteId != null) {
                 Note(
                     id = noteId!!,
@@ -145,7 +147,7 @@ class FormNoteFragment : Fragment() {
                     userId = userRepository.getUser()!!.uid,
                     title = title,
                     description = description,
-                    public = public
+                    public = public ?: false
                 )
             } else {
                 Note(
@@ -154,7 +156,8 @@ class FormNoteFragment : Fragment() {
                     userId = userRepository.getUser()!!.uid,
                     title = title,
                     description = description,
-                    public = public
+                    public = public ?: false,
+                    synchronized = true
                 )
             }
         }

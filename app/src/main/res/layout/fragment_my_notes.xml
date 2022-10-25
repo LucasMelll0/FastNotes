@@ -1,58 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/beige"
     tools:context=".ui.fragments.MyNotesFragment">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ProgressBar
+        android:id="@+id/progressbar_my_notes_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_user_notes"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh_user_notes"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_notes_mynotes"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview_notes_mynotes"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:listitem="@layout/note_list_item" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent"
+            tools:listitem="@layout/note_list_item" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_note_my_notes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:backgroundTint="@color/dark_beige"
-            android:contentDescription="@string/fab_add_description"
-            app:borderWidth="0dp"
-            app:fabCustomSize="54dp"
-            app:fabSize="mini"
-            app:layout_constraintBottom_toTopOf="@id/fab_switch_layout_my_notes"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:maxImageSize="44dp"
-            app:srcCompat="@drawable/ic_add"
-            app:tint="@color/yellowish_brown" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_note_my_notes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/dark_beige"
+        android:contentDescription="@string/fab_add_description"
+        app:borderWidth="0dp"
+        app:fabCustomSize="54dp"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toTopOf="@id/fab_switch_layout_my_notes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="44dp"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/yellowish_brown" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_switch_layout_my_notes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:backgroundTint="@color/dark_beige"
-            android:contentDescription="@string/fab_switch_description"
-            app:borderWidth="0dp"
-            app:fabCustomSize="54dp"
-            app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:maxImageSize="34dp"
-            app:srcCompat="@drawable/ic_linear_orientation"
-            app:tint="@color/yellowish_brown" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</FrameLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_switch_layout_my_notes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/dark_beige"
+        android:contentDescription="@string/fab_switch_description"
+        app:borderWidth="0dp"
+        app:fabCustomSize="54dp"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="34dp"
+        app:srcCompat="@drawable/ic_linear_orientation"
+        app:tint="@color/yellowish_brown" />
+</androidx.constraintlayout.widget.ConstraintLayout>

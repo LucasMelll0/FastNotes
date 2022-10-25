@@ -136,15 +136,17 @@
             app:layout_constraintStart_toEndOf="@id/title_swicth_public"
             android:layout_marginStart="16dp"/>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/fab_delete_note_fragment"
             android:layout_width="0dp"
             android:layout_height="50dp"
+            style="@style/Widget.Material3.Button.ElevatedButton"
             app:layout_constraintTop_toBottomOf="@id/title_swicth_public"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/fab_add_image"
             android:layout_marginHorizontal="24dp"
             android:text="@string/delete"
+            android:textSize="16sp"
             android:gravity="center"
             app:iconGravity="textStart"
             android:backgroundTint="@color/red"

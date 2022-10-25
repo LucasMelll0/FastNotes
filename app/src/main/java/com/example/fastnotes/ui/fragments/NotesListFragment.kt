@@ -8,10 +8,12 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
 import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.databinding.FragmentNotesListBinding
+import com.example.fastnotes.extensions.showDialog
 import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
 import com.example.fastnotes.ui.viewpager.ViewPagerAdapter
@@ -43,16 +45,18 @@ class NotesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setsUpToolbar()
         setsUpTabLayout()
+        trySyncNotes()
+    }
 
-
+    private fun trySyncNotes() {
+        lifecycleScope.launch {
+            notesRepository.trySyncNotes()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setsUpOnBackPressed()
-        lifecycleScope.launch {
-            notesRepository.trySyncNotes()
-        }
     }
 
 
@@ -80,8 +84,12 @@ class NotesListFragment : Fragment() {
 
     private fun setsUpDisconnectButton() {
         binding.imagebuttonDisconnectUser.setOnClickListener {
-            repository.disconnect()
-            findNavController().navigate(R.id.action_notesListFragment_to_loginFragment)
+            showDialog(message = R.string.disconnect_question) {
+                binding.progressbarListFragment.visibility = View.VISIBLE
+                repository.disconnect()
+                binding.progressbarListFragment.visibility = View.GONE
+                findNavController().navigate(R.id.action_notesListFragment_to_loginFragment)
+            }
         }
     }
 

@@ -85,6 +85,9 @@ class FirebaseDatabaseHelper(
                 fragment.getString(R.string.message_offline_sync_notes),
                 5000
             ).show()
+            fragment.lifecycleScope.launch {
+                dao.save(note.copy(synchronized = false))
+            }
             return
         }
     }

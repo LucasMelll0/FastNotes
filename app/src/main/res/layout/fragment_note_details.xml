@@ -52,20 +52,6 @@
                 tools:src="@tools:sample/backgrounds/scenic" />
         </androidx.cardview.widget.CardView>
 
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardview_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="50dp"
-            app:cardBackgroundColor="@color/beige"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="@dimen/cardview_default_elevation"
-            app:layout_constraintEnd_toEndOf="@id/cardview_imageview"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardview_imageview">
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textview_title_all_note"
                 android:layout_width="wrap_content"
@@ -76,35 +62,24 @@
                 android:textSize="30sp"
                 android:layout_margin="17dp"
                 android:textColor="@color/carbon"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@id/cardview_imageview"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardview_imageview"/>
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textview_user_name_all_note"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 tools:text="userName"
-                android:layout_marginBottom="16dp"
-                android:layout_marginStart="16dp"
+               android:layout_marginTop="-16dp"
                 android:textSize="20sp"
                 android:textColor="@color/yellowish_brown"
+                app:layout_constraintTop_toBottomOf="@id/textview_title_all_note"
+                app:layout_constraintStart_toStartOf="@id/textview_title_all_note"
                 />
-        </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardview_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="50dp"
-            app:cardBackgroundColor="@color/beige"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="@dimen/cardview_default_elevation"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardview_title"
-            app:layout_constraintVertical_bias="0">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textview_description_all_note"
@@ -115,8 +90,14 @@
                 android:textSize="24sp"
                 android:layout_margin="16dp"
                 android:textStyle="italic"
-                android:textColor="@color/carbon"/>
-        </androidx.cardview.widget.CardView>
+                android:textColor="@color/carbon"
+                android:layout_marginHorizontal="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintTop_toBottomOf="@id/textview_user_name_all_note"/>
 
 
 

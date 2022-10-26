@@ -1,6 +1,7 @@
 package com.example.fastnotes.extensions
 
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
 import com.example.fastnotes.databinding.ConfirmationBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -22,4 +23,8 @@ fun Fragment.showDialog(
     dialog.setCancelable(true)
     dialog.setContentView(view.root)
     dialog.show()
+}
+
+fun Fragment.goTo(destination: Int){
+    findNavController().navigate(destination)
 }

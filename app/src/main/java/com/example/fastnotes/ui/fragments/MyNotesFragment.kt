@@ -1,7 +1,6 @@
 package com.example.fastnotes.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -99,11 +98,12 @@ class MyNotesFragment : Fragment() {
 
     private suspend fun getNotes() {
         binding.progressbarMyNotesFragment.visibility = View.VISIBLE
-        repository.getUserNotes()
-            .collect { notes ->
+        repository.getUserNotes()?.let {
+            it.collect { notes ->
                 adapter.update(notes)
                 binding.progressbarMyNotesFragment.visibility = View.GONE
             }
+        }
     }
 
     private fun setsUpFabAddNote() {

@@ -46,4 +46,8 @@
     <string name="delete_user_confirmation_question">Really want to delete the user?</string>
     <string name="confirmation_question_delete_note">Really want to delete this note?</string>
     <string name="disconnect_question">Do you really want to disconnect?</string>
+    <string name="delete_user">Delete User</string>
+    <string name="delete_user_question">Do You Really Want to Delete your user?</string>
+    <string name="error_delete_user">There was an error deleting the user!!</string>
+    <string name="check_the_password_and_try_again">check the password and try again!!</string>
 </resources>

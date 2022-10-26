@@ -18,8 +18,8 @@ interface NoteDao {
     @Insert(onConflict = REPLACE)
     suspend fun save(notes: List<Note>)
 
-    @Query("SELECT * FROM Note WHERE disabled = 0")
-    fun getAll(): Flow<List<Note>>
+    @Query("SELECT * FROM Note WHERE disabled = 0 AND userId = :userId")
+    fun getAll(userId: String): Flow<List<Note>>
 
     @Query("SELECT * FROM Note WHERE id = :noteId AND disabled = 0")
     fun getById(noteId: String): Flow<Note>

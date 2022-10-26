@@ -6,6 +6,7 @@ import com.example.fastnotes.database.dao.NoteDao
 import com.example.fastnotes.database.firebase.FirebaseDatabaseHelper
 import com.example.fastnotes.model.Note
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.Flow
 
 
 class NoteRepository(
@@ -17,6 +18,8 @@ class NoteRepository(
         fragment,
         dao
     )
+
+    private val userId = UserRepository(fragment).getUser()?.uid
 
 
     suspend fun save(note: Note) {
@@ -107,7 +110,11 @@ class NoteRepository(
     }
 
 
-    fun getUserNotes() = dao.getAll()
+    fun getUserNotes(): Flow<List<Note>>? {
+        return userId?.let {
+            dao.getAll(userId)
+        }
+    }
 
 
     suspend fun remove(note: Note) {

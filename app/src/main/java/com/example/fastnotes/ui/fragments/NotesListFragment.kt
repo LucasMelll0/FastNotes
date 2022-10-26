@@ -78,7 +78,9 @@ class NotesListFragment : Fragment() {
 
     private fun setsUpProfileButton() {
         binding.imagebuttonProfileUser.setOnClickListener {
-            Toast.makeText(requireContext(), "User Profile", Toast.LENGTH_SHORT).show()
+            repository.getUser()?.let {
+                findNavController().navigate(R.id.action_notesListFragment_to_userProfileFragment)
+            }
         }
     }
 

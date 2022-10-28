@@ -50,4 +50,15 @@
     <string name="delete_user_question">Do You Really Want to Delete your user?</string>
     <string name="error_delete_user">There was an error deleting the user!!</string>
     <string name="check_the_password_and_try_again">check the password and try again!!</string>
+    <string name="change_password">Change Password</string>
+    <string name="new_password">New Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="error_on_change_password">An error occurred while trying to change the password!!</string>
+    <string name="success_change_password">Password has been changed successfully!!</string>
+    <string name="forgot_your_password_question"><u>forgot your password?</u></string>
+    <string name="forgot_your_password_question_line_break">Forgot your \n password?</string>
+    <string name="reset_password_text">Enter your email so we can send you an email to reset your password</string>
+    <string name="submit">Submit</string>
+    <string name="email_reset_password_sent_successful">An email with a password reset link has been sent to you</string>
+    <string name="default_error_message">An error has been occurred!!</string>
 </resources>

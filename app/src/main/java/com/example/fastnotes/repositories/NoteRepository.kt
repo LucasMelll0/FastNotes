@@ -137,5 +137,15 @@ class NoteRepository(
         }
     }
 
+    suspend fun removeAllUserNotes(userId: String){
+        dao.removeAllUserNotes(userId)
+        disableAllUserNotes(userId)
+        dbFirebase.removeAllUserNotes(userId)
+    }
+
+    private suspend fun disableAllUserNotes(userId: String) {
+        dao.disableAllUserNotes(userId)
+    }
+
 
 }

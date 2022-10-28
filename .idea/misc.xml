@@ -17,16 +17,19 @@
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/activity_register_user.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/confirm_user_delete_bottom_sheet.xml" value="0.25" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/confirmation_bottom_sheet.xml" value="0.264" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/confirmation_change_password_bottom_sheet.xml" value="0.24895833333333334" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/confirmation_user_delete_bottom_sheet.xml" value="0.20925925925925926" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_all_note.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_all_notes.xml" value="0.176" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_form_note.xml" value="0.264" />
-        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_login.xml" value="0.25" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_login.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_my_note.xml" value="0.25" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_my_notes.xml" value="0.176" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_note.xml" value="0.25" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_note_details.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_notes_list.xml" value="0.25" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_register.xml" value="0.2359375" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_reset_password.xml" value="0.24895833333333334" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_user_profile.xml" value="0.2" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/image_form_dialog.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/my_note_list_item.xml" value="0.2" />

@@ -1,59 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.UserProfileFragment"
-    android:background="@color/beige">
+    android:fillViewport="true">
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_back"
-        android:backgroundTint="@color/invisible"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"/>
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".ui.fragments.UserProfileFragment"
+        android:background="@color/beige">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textview_user_name_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.38"
-        tools:text="User Name"
-        android:gravity="center"
-        android:textSize="32sp"
-        android:textColor="@color/carbon"
-        android:textStyle="bold"/>
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/imagebutton_edit_user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/textview_user_name_profile"
-        app:layout_constraintBottom_toBottomOf="@id/textview_user_name_profile"
-        app:layout_constraintStart_toEndOf="@id/textview_user_name_profile"
-        android:src="@drawable/ic_edit"
-        android:backgroundTint="@color/invisible"
-        android:tint="@color/carbon"/>
-    <Button
-        android:id="@+id/button_delete_user_profile"
-        android:layout_width="0dp"
-        android:layout_height="65dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_user_name_profile"
-        android:layout_marginVertical="50dp"
-        android:layout_marginHorizontal="70dp"
-        style="@style/Widget.Material3.Button.ElevatedButton"
-        android:backgroundTint="@color/red"
-        android:text="@string/delete_user"
-        android:textSize="24sp"
-        android:textColor="@color/beige"/>
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            android:backgroundTint="@color/invisible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textview_user_name_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.38"
+            tools:text="User Name"
+            android:gravity="center"
+            android:textSize="32sp"
+            android:textColor="@color/carbon"
+            android:textStyle="bold"/>
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/imagebutton_edit_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/textview_user_name_profile"
+            app:layout_constraintBottom_toBottomOf="@id/textview_user_name_profile"
+            app:layout_constraintStart_toEndOf="@id/textview_user_name_profile"
+            android:src="@drawable/ic_edit"
+            android:backgroundTint="@color/invisible"
+            android:tint="@color/carbon"/>
+        <Button
+            android:id="@+id/button_change_password_user_profile"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textview_user_name_profile"
+            android:layout_marginVertical="50dp"
+            android:layout_marginHorizontal="70dp"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:backgroundTint="@color/yellowish_brown"
+            android:text="@string/change_password"
+            android:textSize="24sp"
+            android:textColor="@color/beige"/>
+        <Button
+            android:id="@+id/button_delete_user_profile"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_change_password_user_profile"
+            android:layout_marginVertical="20dp"
+            android:layout_marginHorizontal="70dp"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:backgroundTint="@color/red"
+            android:text="@string/delete_user"
+            android:textSize="24sp"
+            android:textColor="@color/beige"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

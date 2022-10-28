@@ -32,7 +32,14 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         checkAreConnected()
         setsUpFab()
+        setsUpForgotPasswordText()
         setsUpRegisterText()
+    }
+
+    private fun setsUpForgotPasswordText() {
+        binding.textviewForgotPasswordQuestion.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_resetPasswordFragment)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

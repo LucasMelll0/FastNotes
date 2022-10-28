@@ -246,4 +246,16 @@ class FirebaseDatabaseHelper(
             return
         }
     }
+
+    fun removeAllUserNotes(userId: String) {
+        connected = checkConnection()
+        if (connected){
+            currentUser?.let {
+                dbFirebase
+                    .child(NOTE_PATH)
+                    .child(userId)
+                    .setValue(null)
+            }
+        }
+    }
 }

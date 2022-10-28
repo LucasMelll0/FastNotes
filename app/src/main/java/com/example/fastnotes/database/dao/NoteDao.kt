@@ -38,4 +38,10 @@ interface NoteDao {
 
     @Query("SELECT * FROM Note WHERE `key` = :key")
     suspend fun getAllByKey(key: String): List<Note>
+
+    @Query("DELETE FROM Note WHERE userId = :userId")
+    suspend fun removeAllUserNotes(userId: String)
+
+    @Query("UPDATE Note SET disabled = 1 WHERE userId = :userId")
+    suspend fun disableAllUserNotes(userId: String)
 }

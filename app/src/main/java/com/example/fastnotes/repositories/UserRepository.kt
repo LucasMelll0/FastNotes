@@ -3,20 +3,30 @@ package com.example.fastnotes.repositories
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
+import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.extensions.goTo
 import com.example.fastnotes.model.User
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.EmailAuthCredential
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
+import kotlinx.coroutines.launch
 
+const val FIREBASE_AUTH_TEST = "FireBaseAuth Test"
 class UserRepository(private val fragment: Fragment) {
 
-    private val firebaseAuth = FirebaseAuth.getInstance()
+    private val firebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private val noteRepository by lazy {
+        NoteRepository(
+            fragment,
+            AppDataBase.instance(fragment.requireContext()).noteDao()
+        )
+    }
+
 
     fun connect(user: User) {
         firebaseAuth.signInWithEmailAndPassword(
@@ -109,17 +119,19 @@ class UserRepository(private val fragment: Fragment) {
 
     fun getUser(): FirebaseUser? = firebaseAuth.currentUser
 
-    fun deleteUser() {
-        firebaseAuth.currentUser?.let { user ->
-            Log.i("FireBaseAuth Test", "deleteUser: user: $user")
+    private fun deleteUser() {
+        getUser()?.let { user ->
             user
                 .delete()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        fragment.lifecycleScope.launch {
+                            noteRepository.removeAllUserNotes(user.uid)
+                        }
                         fragment.findNavController()
                             .navigate(R.id.action_userProfileFragment_to_loginFragment)
                     } else {
-                        Log.e("FireBaseAuth Test", "deleteUser: ", task.exception)
+                        Log.e(FIREBASE_AUTH_TEST, "deleteUser: ", task.exception)
                         Toast.makeText(
                             fragment.requireContext(),
                             fragment.getString(R.string.error_delete_user),
@@ -128,7 +140,7 @@ class UserRepository(private val fragment: Fragment) {
                     }
 
                 }.addOnCanceledListener {
-                    Log.i("FireBaseAuth Test", "deleteUser: onCanceledListener")
+                    Log.i(FIREBASE_AUTH_TEST, "deleteUser: onCanceledListener")
                     Toast.makeText(
                         fragment.requireContext(),
                         fragment.getString(R.string.error_delete_user),
@@ -145,10 +157,10 @@ class UserRepository(private val fragment: Fragment) {
                 .getCredential(email, password)
             user.reauthenticate(credential)
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful){
+                    if (task.isSuccessful) {
                         deleteUser()
-                    }else{
-                        Log.e("FireBaseAuth Test", "reauthenticatesForDelete: ", task.exception)
+                    } else {
+                        Log.e(FIREBASE_AUTH_TEST, "reauthenticatesForDelete: ", task.exception)
                         Toast.makeText(
                             fragment.requireContext(),
                             fragment.getString(R.string.check_the_password_and_try_again),
@@ -165,5 +177,95 @@ class UserRepository(private val fragment: Fragment) {
         }
     }
 
+    fun authenticatesForChangePassWord(oldPassword: String, newPassword: String) {
+        getUser()?.let { user ->
+            val email = user.email!!
+            val credentials = EmailAuthProvider
+                .getCredential(email, oldPassword)
+            user.reauthenticate(credentials)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        changePassword(newPassword)
+                    } else {
+                        Log.e(
+                            FIREBASE_AUTH_TEST,
+                            "authenticatesForChangePassWord: ",
+                            task.exception
+                        )
+                        Toast.makeText(
+                            fragment.requireContext(),
+                            fragment.getString(R.string.check_the_password_and_try_again),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }.addOnCanceledListener {
+                    Toast.makeText(
+                        fragment.requireContext(),
+                        fragment.getString(R.string.error_on_change_password),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+        }
+    }
+
+    private fun changePassword(newPassword: String) {
+        getUser()?.let { user ->
+            user
+                .updatePassword(newPassword)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(
+                            fragment.requireContext(),
+                            fragment.getString(R.string.success_change_password),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Log.e(FIREBASE_AUTH_TEST, "changePassword: ", task.exception)
+                        Toast.makeText(
+                            fragment.requireContext(),
+                            fragment.getString(R.string.error_on_change_password),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }.addOnCanceledListener {
+                    Toast.makeText(
+                        fragment.requireContext(),
+                        fragment.getString(R.string.error_on_change_password),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+        }
+    }
+
+    fun sendPasswordResetEmail(email: String) {
+        firebaseAuth
+            .sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        fragment.requireContext(),
+                        fragment.getString(R.string.email_reset_password_sent_successful),
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    Log.e(FIREBASE_AUTH_TEST, "sendPasswordResetEmail: ", task.exception)
+                    Toast.makeText(
+                        fragment.requireContext(),
+                        fragment.getString(R.string.default_error_message),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+            .addOnCanceledListener {
+                Toast.makeText(
+                    fragment.requireContext(),
+                    fragment.getString(R.string.default_error_message),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+    }
+
 
 }
+

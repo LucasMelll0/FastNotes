@@ -1,5 +1,7 @@
 package com.example.fastnotes.ui.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +11,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.fastnotes.R
 import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.databinding.FragmentMyNotesBinding
 import com.example.fastnotes.extensions.showDialog
 import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.ui.recyclerview.adapter.NotesAdapter
 import kotlinx.coroutines.launch
+
+const val USER_NOTES_LIST_LAYOUT = "USER_NOTES_LIST_LAYOUT"
 
 
 class MyNotesFragment : Fragment() {
@@ -30,6 +36,13 @@ class MyNotesFragment : Fragment() {
         )
     }
     private val adapter by lazy { NotesAdapter(requireContext(), userFieldEnable = false) }
+    private val sharedPreference: SharedPreferences by lazy {
+        requireContext().getSharedPreferences(
+            USER_NOTES_LIST_LAYOUT,
+            Context.MODE_PRIVATE
+        )
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,15 +67,56 @@ class MyNotesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setsUpFabAddNote()
         setsUpRecyclerView()
+        setsUpFabSwitchListLayout()
+
+    }
+
+    private fun setsUpFabSwitchListLayout() {
+        binding.apply {
+            binding.fabSwitchLayoutMyNotes.setOnClickListener {
+                switchRecyclerViewLayoutManager()
+            }
+        }
+    }
+
+    private fun switchRecyclerViewLayoutManager() {
+        binding.apply {
+            val editor = sharedPreference.edit()
+            val staggeredLayout = sharedPreference.getBoolean("staggeredLayout", true)
+            if (staggeredLayout) {
+                recyclerviewNotesMynotes.layoutManager = LinearLayoutManager(requireContext())
+                fabSwitchLayoutMyNotes.setImageResource(R.drawable.ic_staggeredgrid)
+                editor.putBoolean("staggeredLayout", false)
+                editor.apply()
+            } else {
+                recyclerviewNotesMynotes.layoutManager = StaggeredGridLayoutManager(2, 1)
+                fabSwitchLayoutMyNotes.setImageResource(R.drawable.ic_linear_orientation)
+                editor.putBoolean("staggeredLayout", true)
+                editor.apply()
+            }
+        }
     }
 
 
     private fun setsUpRecyclerView() {
         binding.recyclerviewNotesMynotes.adapter = adapter
         binding.recyclerviewNotesMynotes.setHasFixedSize(true)
-        binding.recyclerviewNotesMynotes.layoutManager = StaggeredGridLayoutManager(2, 1)
+        setsUpRecyclerViewLayoutManager()
         setsUpAdapterFunctions()
         setsUpSwipeRefresh()
+    }
+
+    private fun setsUpRecyclerViewLayoutManager() {
+        binding.apply {
+            val staggeredLayout = sharedPreference.getBoolean("staggeredLayout", true)
+            if (staggeredLayout) {
+                recyclerviewNotesMynotes.layoutManager = StaggeredGridLayoutManager(2, 1)
+                fabSwitchLayoutMyNotes.setImageResource(R.drawable.ic_linear_orientation)
+            } else {
+                recyclerviewNotesMynotes.layoutManager = LinearLayoutManager(requireContext())
+                fabSwitchLayoutMyNotes.setImageResource(R.drawable.ic_staggeredgrid)
+            }
+        }
     }
 
     private fun setsUpAdapterFunctions() {
@@ -73,11 +127,11 @@ class MyNotesFragment : Fragment() {
         }
         adapter.whenClickDelete = { note ->
             showDialog {
-            lifecycleScope.launch {
-                binding.progressbarMyNotesFragment.visibility = View.VISIBLE
-                repository.remove(note)
-                binding.progressbarMyNotesFragment.visibility = View.GONE
-            }
+                lifecycleScope.launch {
+                    binding.progressbarMyNotesFragment.visibility = View.VISIBLE
+                    repository.remove(note)
+                    binding.progressbarMyNotesFragment.visibility = View.GONE
+                }
             }
         }
     }

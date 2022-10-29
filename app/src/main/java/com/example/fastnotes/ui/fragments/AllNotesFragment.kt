@@ -1,5 +1,7 @@
 package com.example.fastnotes.ui.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.fastnotes.R
 import com.example.fastnotes.database.AppDataBase
@@ -23,6 +26,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 
+const val ALL_NOTES_LIST_LAYOUT = "ALL_NOTES_LIST_LAYOUT"
 
 class AllNotesFragment : Fragment() {
 
@@ -35,6 +39,19 @@ class AllNotesFragment : Fragment() {
     }
     private val userRepository by lazy { UserRepository(this) }
     private val noteList = mutableListOf<Note>()
+    private val sharedPreference: SharedPreferences by lazy {
+        requireContext().getSharedPreferences(
+            ALL_NOTES_LIST_LAYOUT,
+            Context.MODE_PRIVATE
+        )
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,9 +71,10 @@ class AllNotesFragment : Fragment() {
                                 if (snapUser.exists()) {
                                     for (snapKey in snapUser.children) {
                                         if (snapKey.exists()) {
-                                            for (snapNote in snapKey.children){
-                                                if (snapNote.exists()){
-                                                    val note = snapNote.getValue(Note::class.java) as Note
+                                            for (snapNote in snapKey.children) {
+                                                if (snapNote.exists()) {
+                                                    val note =
+                                                        snapNote.getValue(Note::class.java) as Note
                                                     if (note.public) noteList.add(note)
                                                 }
                                             }
@@ -89,18 +107,47 @@ class AllNotesFragment : Fragment() {
                 .actionNotesListFragmentToNoteDetailsFragment(note)
             findNavController().navigate(action)
         }
-        binding.recyclerviewNotesAllnotes.apply {
-            this.adapter = adapter
-            layoutManager =
-                StaggeredGridLayoutManager(2, 1) // Orientation 0 = horizontal | 1 = vertical
-        }
+        binding.recyclerviewNotesAllnotes.adapter = adapter
+        setsUpRecyclerViewLayoutManager()
+        setsUpFabSwitchListLayout()
+
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return binding.root
+    private fun setsUpFabSwitchListLayout() {
+        binding.fabSwitchLayoutAllNotes.setOnClickListener {
+            switchRecyclerViewLayoutManager()
+        }
+    }
+
+    private fun switchRecyclerViewLayoutManager() {
+        binding.apply {
+            val editor = sharedPreference.edit()
+            val staggeredLayout = sharedPreference.getBoolean("staggeredLayout", true)
+            if (staggeredLayout){
+                recyclerviewNotesAllnotes.layoutManager = LinearLayoutManager(requireContext())
+                fabSwitchLayoutAllNotes.setImageResource(R.drawable.ic_staggeredgrid)
+                editor.putBoolean("staggeredLayout", false)
+                editor.apply()
+            }else {
+                recyclerviewNotesAllnotes.layoutManager = StaggeredGridLayoutManager(2, 1)
+                fabSwitchLayoutAllNotes.setImageResource(R.drawable.ic_linear_orientation)
+                editor.putBoolean("staggeredLayout", true)
+                editor.apply()
+            }
+        }
+    }
+
+    private fun setsUpRecyclerViewLayoutManager() {
+        binding.apply {
+            val staggeredLayout = sharedPreference.getBoolean("staggeredLayout", true)
+            if (staggeredLayout) {
+                recyclerviewNotesAllnotes.layoutManager = StaggeredGridLayoutManager(2, 1)
+                fabSwitchLayoutAllNotes.setImageResource(R.drawable.ic_linear_orientation)
+            } else {
+                recyclerviewNotesAllnotes.layoutManager = LinearLayoutManager(requireContext())
+                fabSwitchLayoutAllNotes.setImageResource(R.drawable.ic_staggeredgrid)
+            }
+        }
     }
 }

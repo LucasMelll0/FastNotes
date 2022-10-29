@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/drawable-anydpi/ic_cancel.xml" value="0.136" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/drawable/button_animation.xml" value="0.136" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/drawable/button_state_pressed.xml" value="0.136" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/drawable/ic_exit.xml" value="0.1935" />
@@ -30,7 +31,7 @@
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_notes_list.xml" value="0.25" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_register.xml" value="0.2359375" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_reset_password.xml" value="0.24895833333333334" />
-        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_user_profile.xml" value="0.2" />
+        <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/fragment_user_profile.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/image_form_dialog.xml" value="0.264" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/my_note_list_item.xml" value="0.2" />
         <entry key="..\:/Users/lucas/AndroidStudioProjects/FastNotes/app/src/main/res/layout/note_list_item.xml" value="0.2" />

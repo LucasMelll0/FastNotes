@@ -37,6 +37,33 @@
             android:textSize="32sp"
             android:textColor="@color/carbon"
             android:textStyle="bold"/>
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edittext_user_name_profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/textview_user_name_profile"
+            app:layout_constraintBottom_toBottomOf="@id/textview_user_name_profile"
+            app:layout_constraintStart_toStartOf="@id/textview_user_name_profile"
+            app:layout_constraintEnd_toEndOf="@id/textview_user_name_profile"
+            tools:text="User Name"
+            android:textSize="32sp"
+            android:textColor="@color/carbon"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:visibility="gone"
+            />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/imagebutton_cancel_edit_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/edittext_user_name_profile"
+            app:layout_constraintBottom_toBottomOf="@id/edittext_user_name_profile"
+            app:layout_constraintEnd_toStartOf="@id/edittext_user_name_profile"
+            android:src="@drawable/ic_cancel"
+            android:backgroundTint="@color/invisible"
+            android:tint="@color/carbon"
+            android:visibility="gone"/>
+
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/imagebutton_edit_user_name"
             android:layout_width="wrap_content"

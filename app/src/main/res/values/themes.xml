@@ -20,4 +20,8 @@
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="strokeColor">@color/yellowish_brown</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
 </resources>

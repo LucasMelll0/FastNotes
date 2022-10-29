@@ -20,6 +20,7 @@ const val FIREBASE_AUTH_TEST = "FireBaseAuth Test"
 class UserRepository(private val fragment: Fragment) {
 
     private val firebaseAuth by lazy { FirebaseAuth.getInstance() }
+    val auth get() = firebaseAuth
     private val noteRepository by lazy {
         NoteRepository(
             fragment,
@@ -265,6 +266,7 @@ class UserRepository(private val fragment: Fragment) {
                 ).show()
             }
     }
+
 
 
 }

@@ -62,4 +62,6 @@
     <string name="email_reset_password_sent_successful">An email with a password reset link has been sent to you</string>
     <string name="default_error_message">An error has been occurred!!</string>
     <string name="error_change_username">Error changing username!!</string>
+    <string name="passwords_are_same">Passwords are the same</string>
+    <string name="offline_message">You\'re offline!!</string>
 </resources>

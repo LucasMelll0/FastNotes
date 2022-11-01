@@ -13,7 +13,9 @@ class FormImageDialog(val context: Context) {
         urlDefault: String? = null,
         getUrl: (image: String) -> Unit
     ){
-        ImageFormDialogBinding.inflate(LayoutInflater.from(context)).apply {
+        val dialog = AlertDialog.Builder(context).create()
+        val view = ImageFormDialogBinding.inflate(LayoutInflater.from(context), null, false)
+        view.apply {
             urlDefault?.let{
                 imageviewImageFormDialog.load(urlDefault)
                 edittextLingImageInputDialog.editText?.setText(urlDefault)
@@ -22,15 +24,16 @@ class FormImageDialog(val context: Context) {
                 val url = edittextLingImageInputDialog.editText?.text.toString()
                 imageviewImageFormDialog.load(url)
             }
-           AlertDialog
-               .Builder(context)
-               .setView(root)
-               .setPositiveButton(context.getText(R.string.confirm)) {_, _ ->
-                   val url = edittextLingImageInputDialog.editText?.text.toString()
-                   getUrl(url)
-               }
-               .setNegativeButton(context.getText(R.string.cancel)) { _, _ -> }
-               .show()
+            buttonConfirmImageForm.setOnClickListener {
+                val url = edittextLingImageInputDialog.editText?.text.toString()
+                getUrl(url)
+                dialog.dismiss()
+            }
+            buttonCancelImageForm.setOnClickListener {
+                dialog.dismiss()
+            }
         }
+        dialog.setView(view.root)
+        dialog.show()
     }
 }

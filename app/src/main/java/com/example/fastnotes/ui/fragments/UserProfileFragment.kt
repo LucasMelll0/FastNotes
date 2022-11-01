@@ -47,7 +47,11 @@ class UserProfileFragment : Fragment() {
                 val oldUserName = textviewUserNameProfile.text
                 if(edittextUserNameProfile.visibility == View.VISIBLE){
                     val newUserName = edittextUserNameProfile.text.toString()
-                    tryChangeUserName(newUserName)
+                    if(newUserName != oldUserName.toString()){
+                        tryChangeUserName(newUserName)
+                    }else{
+                        changeUserNameMode()
+                    }
                 }else{
                     changeUserNameMode()
                     setsUserNameEditText(oldUserName)
@@ -160,9 +164,16 @@ class UserProfileFragment : Fragment() {
             buttonConfirmationChangePasswordBottomSheet.setOnClickListener {
                 if (samePasswords(view) && fieldsNotEmpty(view)) {
                     val oldPassword = edittextOldPasswordChangePassword.editText!!.text.toString()
-                    val newPassword =
-                        edittextConfirmPasswordChangePassword.editText!!.text.toString()
-                    repository.authenticatesForChangePassWord(oldPassword, newPassword)
+                    val newPassword = edittextConfirmPasswordChangePassword.editText!!.text.toString()
+                    if (oldPassword != newPassword){
+                        repository.authenticatesForChangePassWord(oldPassword, newPassword)
+                    }else{
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.passwords_are_same),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
         }

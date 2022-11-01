@@ -67,9 +67,11 @@ class FormNoteFragment : Fragment() {
         binding.fabAddImage.setOnClickListener {
             FormImageDialog(requireContext()).show(image) { url ->
                 image = url
-                image?.let {
-                    binding.imageviewInputNoteFragment.tryLoadImage(it)
-                    binding.cardviewImageview.visibility = View.VISIBLE
+                image?.let { link ->
+                    if (link.isNotEmpty()){
+                        binding.imageviewInputNoteFragment.tryLoadImage(link)
+                        binding.cardviewImageview.visibility = View.VISIBLE
+                    }
                 }
             }
         }

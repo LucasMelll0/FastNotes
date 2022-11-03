@@ -4,20 +4,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.fastnotes.R
+import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.databinding.FragmentRegisterBinding
 import com.example.fastnotes.model.User
+import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 
 
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private val repository by lazy { UserRepository(this) }
+    private val repository by lazy {
+        UserRepository(
+            this,
+            FirebaseAuth.getInstance(),
+            NoteRepository(
+                this,
+                AppDataBase.instance(requireContext()).noteDao()
+            )
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

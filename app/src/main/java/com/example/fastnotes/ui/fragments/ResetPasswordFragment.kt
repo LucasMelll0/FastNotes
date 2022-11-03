@@ -6,15 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.databinding.FragmentResetPasswordBinding
+import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
-
+import com.google.firebase.auth.FirebaseAuth
 
 class ResetPasswordFragment : Fragment() {
 
     private var _binding: FragmentResetPasswordBinding? = null
     private val binding get() = _binding!!
-    private val repository = UserRepository(this)
+    private val repository by lazy {
+        UserRepository(
+            this,
+            FirebaseAuth.getInstance(),
+            NoteRepository(
+                this,
+                AppDataBase.instance(requireContext()).noteDao()
+            )
+        )
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,9 +51,9 @@ class ResetPasswordFragment : Fragment() {
     private fun setsUpFabSubmit() {
         binding.apply {
             fabSubmitResetPassword.setOnClickListener {
-                if (fieldNotEmpty()){
+                if (fieldNotEmpty()) {
                     val email = binding.edittextEmailResetPassword.editText?.text.toString()
-                        repository.sendPasswordResetEmail(email)
+                    repository.sendPasswordResetEmail(email)
                 }
             }
         }
@@ -58,3 +70,5 @@ class ResetPasswordFragment : Fragment() {
     }
 
 }
+
+

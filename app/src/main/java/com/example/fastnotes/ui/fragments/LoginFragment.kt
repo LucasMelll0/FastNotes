@@ -8,16 +8,28 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
+import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.databinding.FragmentLoginBinding
 import com.example.fastnotes.model.User
+import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val repository by lazy { UserRepository(this) }
+    private val repository by lazy {
+        UserRepository(
+            this,
+            FirebaseAuth.getInstance(),
+            NoteRepository(
+                this,
+                AppDataBase.instance(requireContext()).noteDao()
+            )
+        )
+    }
 
 
     override fun onCreateView(
@@ -55,7 +67,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun checkAreConnected() {
-        repository.getUser()?.let {
+        UserRepository.getUser()?.let {
             findNavController().navigate(R.id.action_loginFragment_to_notesListFragment)
         }
     }

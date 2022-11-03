@@ -23,9 +23,10 @@ class FirebaseDatabaseHelper(
 
     companion object {
         val dbFirebase = FirebaseDatabase.getInstance().reference
-        var connected: Boolean = false
-
     }
+
+
+    var connected: Boolean = false
 
     private fun checkConnection(): Boolean {
         val context = fragment.requireContext()

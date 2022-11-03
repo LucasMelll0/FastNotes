@@ -4,11 +4,13 @@ import android.view.View
 import android.widget.ImageView
 import coil.load
 
-fun ImageView.tryLoadImage(image: String = "") {
-    visibility = if (image.isNotEmpty()) {
+fun ImageView.tryLoadImage(image: String = ""): Boolean {
+     return if (image.isNotEmpty()) {
         load(image)
-        View.VISIBLE
+         visibility = View.VISIBLE
+        true
     } else {
-        View.GONE
+         visibility = View.GONE
+         false
     }
 }

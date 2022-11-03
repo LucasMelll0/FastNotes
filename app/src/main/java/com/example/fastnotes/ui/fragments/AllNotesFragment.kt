@@ -12,13 +12,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.fastnotes.R
-import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.database.DATABASE_ERROR
 import com.example.fastnotes.database.NOTE_PATH
 import com.example.fastnotes.database.firebase.FirebaseDatabaseHelper
 import com.example.fastnotes.databinding.FragmentAllNotesBinding
 import com.example.fastnotes.model.Note
-import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
 import com.example.fastnotes.ui.recyclerview.adapter.NotesAdapter
 import com.google.android.material.snackbar.Snackbar
@@ -31,13 +29,6 @@ const val ALL_NOTES_LIST_LAYOUT = "ALL_NOTES_LIST_LAYOUT"
 class AllNotesFragment : Fragment() {
 
     private val binding by lazy { FragmentAllNotesBinding.inflate(LayoutInflater.from(requireContext())) }
-    private val noteRepository by lazy {
-        NoteRepository(
-            this,
-            AppDataBase.instance(requireContext()).noteDao()
-        )
-    }
-    private val userRepository by lazy { UserRepository(this) }
     private val noteList = mutableListOf<Note>()
     private val sharedPreference: SharedPreferences by lazy {
         requireContext().getSharedPreferences(
@@ -59,7 +50,7 @@ class AllNotesFragment : Fragment() {
     }
 
     private fun getNotes() {
-        userRepository.getUser()?.let {
+        UserRepository.getUser()?.let {
             FirebaseDatabaseHelper
                 .dbFirebase
                 .child(NOTE_PATH)
@@ -124,12 +115,12 @@ class AllNotesFragment : Fragment() {
         binding.apply {
             val editor = sharedPreference.edit()
             val staggeredLayout = sharedPreference.getBoolean("staggeredLayout", true)
-            if (staggeredLayout){
+            if (staggeredLayout) {
                 recyclerviewNotesAllnotes.layoutManager = LinearLayoutManager(requireContext())
                 fabSwitchLayoutAllNotes.setImageResource(R.drawable.ic_staggeredgrid)
                 editor.putBoolean("staggeredLayout", false)
                 editor.apply()
-            }else {
+            } else {
                 recyclerviewNotesAllnotes.layoutManager = StaggeredGridLayoutManager(2, 1)
                 fabSwitchLayoutAllNotes.setImageResource(R.drawable.ic_linear_orientation)
                 editor.putBoolean("staggeredLayout", true)

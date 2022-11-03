@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.fastnotes.R
-import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.extensions.goTo
 import com.example.fastnotes.model.User
 import com.google.android.material.snackbar.Snackbar
@@ -20,16 +19,17 @@ import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.coroutines.launch
 
 const val FIREBASE_AUTH_TEST = "FireBaseAuth Test"
-class UserRepository(private val fragment: Fragment) {
+class UserRepository(
+    private val fragment: Fragment,
+    private val firebaseAuth: FirebaseAuth,
+    private val noteRepository: NoteRepository) {
 
-    private val firebaseAuth by lazy { FirebaseAuth.getInstance() }
-    private val noteRepository by lazy {
-        NoteRepository(
-            fragment,
-            AppDataBase.instance(fragment.requireContext()).noteDao()
-        )
-    }
     var connected: Boolean = false
+
+    companion object {
+        fun getUser(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
+    }
+
 
     private fun checkConnection(): Boolean {
         val context = fragment.requireContext()
@@ -79,7 +79,6 @@ class UserRepository(private val fragment: Fragment) {
             ).show()
         }
     }
-
 
     fun register(user: User) {
         connected = checkConnection()
@@ -163,8 +162,6 @@ class UserRepository(private val fragment: Fragment) {
             it.updateProfile(nameChangeRequest)
         }
     }
-
-    fun getUser(): FirebaseUser? = firebaseAuth.currentUser
 
     private fun deleteUser() {
         connected = checkConnection()

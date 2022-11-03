@@ -122,7 +122,7 @@ class MyNotesFragment : Fragment() {
     private fun setsUpAdapterFunctions() {
         adapter.whenClickItem = { note ->
             val action = NotesListFragmentDirections
-                .actionNotesListFragmentToFormNoteFragment(note)
+                .actionNotesListFragmentToFormNoteFragment(note.id)
             findNavController().navigate(action)
         }
         adapter.whenClickDelete = { note ->

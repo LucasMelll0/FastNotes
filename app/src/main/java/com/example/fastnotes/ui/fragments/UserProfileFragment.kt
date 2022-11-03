@@ -8,13 +8,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.fastnotes.R
+import com.example.fastnotes.database.AppDataBase
 import com.example.fastnotes.databinding.ConfirmationChangePasswordBottomSheetBinding
 import com.example.fastnotes.databinding.ConfirmationUserDeleteBottomSheetBinding
 import com.example.fastnotes.databinding.FragmentUserProfileBinding
 import com.example.fastnotes.repositories.FIREBASE_AUTH_TEST
+import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 
 
@@ -22,7 +25,16 @@ class UserProfileFragment : Fragment() {
 
     private var _binding: FragmentUserProfileBinding? = null
     private val binding get() = _binding!!
-    private val repository by lazy { UserRepository(this) }
+    private val repository by lazy {
+        UserRepository(
+            this,
+            FirebaseAuth.getInstance(),
+            NoteRepository(
+                this,
+                AppDataBase.instance(requireContext()).noteDao()
+            )
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,14 +57,14 @@ class UserProfileFragment : Fragment() {
         binding.apply {
             imagebuttonEditUserName.setOnClickListener {
                 val oldUserName = textviewUserNameProfile.text
-                if(edittextUserNameProfile.visibility == View.VISIBLE){
+                if (edittextUserNameProfile.visibility == View.VISIBLE) {
                     val newUserName = edittextUserNameProfile.text.toString()
-                    if(newUserName != oldUserName.toString()){
+                    if (newUserName != oldUserName.toString()) {
                         tryChangeUserName(newUserName)
-                    }else{
+                    } else {
                         changeUserNameMode()
                     }
-                }else{
+                } else {
                     changeUserNameMode()
                     setsUserNameEditText(oldUserName)
                     setsUpCancelChangeUserNameButton()
@@ -68,15 +80,15 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun tryChangeUserName(newUserName: String) {
-        repository.getUser()?.let { user ->
+        UserRepository.getUser()?.let { user ->
             val nameChangeRequest = userProfileChangeRequest {
                 displayName = newUserName
             }
             user.updateProfile(nameChangeRequest)
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful){
+                    if (task.isSuccessful) {
                         changeUserNameMode()
-                    }else{
+                    } else {
                         Log.e(FIREBASE_AUTH_TEST, "tryChangeUserName: ", task.exception)
                         Snackbar.make(
                             requireView(),
@@ -106,7 +118,7 @@ class UserProfileFragment : Fragment() {
 
     private fun changeUserNameEditTextVisibility() {
         binding.apply {
-            when(edittextUserNameProfile.visibility){
+            when (edittextUserNameProfile.visibility) {
 
                 View.GONE -> {
                     edittextUserNameProfile.visibility = View.VISIBLE
@@ -129,7 +141,7 @@ class UserProfileFragment : Fragment() {
 
     private fun changeUserNameTextViewVisibility() {
         binding.apply {
-            when(textviewUserNameProfile.visibility){
+            when (textviewUserNameProfile.visibility) {
                 View.GONE -> {
                     textviewUserNameProfile.visibility = View.VISIBLE
                     imagebuttonCancelEditUserName.visibility = View.GONE
@@ -151,7 +163,7 @@ class UserProfileFragment : Fragment() {
 
     private fun setsUpButtonChangePassword() {
         binding.buttonChangePasswordUserProfile.setOnClickListener {
-            repository.getUser()?.let {
+            UserRepository.getUser()?.let {
                 setsUpBottomSheetChangePassword()
             }
         }
@@ -164,10 +176,11 @@ class UserProfileFragment : Fragment() {
             buttonConfirmationChangePasswordBottomSheet.setOnClickListener {
                 if (samePasswords(view) && fieldsNotEmpty(view)) {
                     val oldPassword = edittextOldPasswordChangePassword.editText!!.text.toString()
-                    val newPassword = edittextConfirmPasswordChangePassword.editText!!.text.toString()
-                    if (oldPassword != newPassword){
+                    val newPassword =
+                        edittextConfirmPasswordChangePassword.editText!!.text.toString()
+                    if (oldPassword != newPassword) {
                         repository.authenticatesForChangePassWord(oldPassword, newPassword)
-                    }else{
+                    } else {
                         Toast.makeText(
                             requireContext(),
                             getString(R.string.passwords_are_same),
@@ -220,7 +233,7 @@ class UserProfileFragment : Fragment() {
 
     private fun setsUpButtonDeleteUser() {
         binding.buttonDeleteUserProfile.setOnClickListener {
-            val user = repository.getUser()
+            val user =  UserRepository.getUser()
             user?.let {
                 setsUpBottomSheetDeleteUser()
             }
@@ -245,7 +258,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setsUpUserName() {
-        val user = repository.getUser()
+        val user =  UserRepository.getUser()
         user?.let {
             val name = user.displayName
             binding.textviewUserNameProfile.text = name

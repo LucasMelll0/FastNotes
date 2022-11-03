@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 
 class NoteRepository(
     private val fragment: Fragment,
-    private val dao: NoteDao
+    private val dao: NoteDao,
 ) {
 
     private val dbFirebase = FirebaseDatabaseHelper(
@@ -19,7 +19,7 @@ class NoteRepository(
         dao
     )
 
-    private val userId = UserRepository(fragment).getUser()?.uid
+    private val userId = UserRepository.getUser()?.uid
 
 
     suspend fun save(note: Note) {
@@ -114,6 +114,9 @@ class NoteRepository(
         return userId?.let {
             dao.getAll(userId)
         }
+    }
+    fun getNoteById(id: String): Flow<Note> {
+        return dao.getById(id)
     }
 
 

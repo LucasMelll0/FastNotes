@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.fastnotes.R
 import com.example.fastnotes.database.AppDataBase
-import com.example.fastnotes.databinding.ConfirmationBottomSheetBinding
 import com.example.fastnotes.databinding.FragmentFormNoteBinding
 import com.example.fastnotes.extensions.showDialog
 import com.example.fastnotes.extensions.tryLoadImage
@@ -18,10 +17,9 @@ import com.example.fastnotes.model.Note
 import com.example.fastnotes.repositories.NoteRepository
 import com.example.fastnotes.repositories.UserRepository
 import com.example.fastnotes.ui.dialogs.FormImageDialog
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-
 
 
 class FormNoteFragment : Fragment() {
@@ -37,7 +35,6 @@ class FormNoteFragment : Fragment() {
                 .noteDao()
         )
     }
-    private val userRepository by lazy { UserRepository(this) }
     private var noteId: String? = null
     private var noteKey: String? = null
     private var image: String? = null
@@ -68,7 +65,7 @@ class FormNoteFragment : Fragment() {
             FormImageDialog(requireContext()).show(image) { url ->
                 image = url
                 image?.let { link ->
-                    if (link.isNotEmpty()){
+                    if (link.isNotEmpty()) {
                         binding.imageviewInputNoteFragment.tryLoadImage(link)
                         binding.cardviewImageview.visibility = View.VISIBLE
                     }
@@ -83,7 +80,15 @@ class FormNoteFragment : Fragment() {
                 noteId?.let {
                     lifecycleScope.launch {
                         val note = createNote()
-                        repository.remove(note)
+                        note?.let {
+                            repository.remove(note)
+                        } ?: run {
+                            Snackbar.make(
+                                requireView(),
+                                getString(R.string.default_error_message),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
                         findNavController().navigate(R.id.action_formNoteFragment_to_notesListFragment)
                     }
                 } ?: findNavController().popBackStack()
@@ -93,10 +98,20 @@ class FormNoteFragment : Fragment() {
     }
 
     private fun checkHasArgs() {
-        args.note?.let { note ->
-            fillFields(note)
+        args.note?.let { noteId ->
+            tryToGetNoteOnDb(noteId)
             setsUpFabDelete()
         } ?: setsUpFabDelete()
+    }
+
+    private fun tryToGetNoteOnDb(noteId: String) {
+        lifecycleScope.launch {
+            binding.progressbarFormNoteFragment.visibility = View.VISIBLE
+            repository.getNoteById(noteId).firstOrNull()?.let { note ->
+                fillFields(note)
+                binding.progressbarFormNoteFragment.visibility = View.GONE
+            } ?: findNavController().popBackStack()
+        }
     }
 
     private fun fillFields(note: Note) {
@@ -105,7 +120,9 @@ class FormNoteFragment : Fragment() {
             noteKey = note.key
             image = note.image
             switchPublicInputNoteFragment.isChecked = note.public
-            imageviewInputNoteFragment.tryLoadImage(note.image)
+            if(imageviewInputNoteFragment.tryLoadImage(note.image)){
+                cardviewImageview.visibility = View.VISIBLE
+            }
             textinputTitleInputNoteFragment.editText?.setText(note.title)
             textinputDescriptionInputNoteFragment.editText?.setText(note.description)
         }
@@ -121,41 +138,59 @@ class FormNoteFragment : Fragment() {
         binding.imagebuttonConfirmNoteActivity.setOnClickListener {
             if (titleNotEmpty()) {
                 val note = createNote()
-                lifecycleScope.launch {
-                    noteId?.let {
-                        repository.update(note)
-                        findNavController().navigate(R.id.action_formNoteFragment_to_notesListFragment)
-                    } ?: run {
-                        repository.save(note)
-                        findNavController().navigate(R.id.action_formNoteFragment_to_notesListFragment)
+                note?.let {
+                    binding.progressbarFormNoteFragment.visibility = View.VISIBLE
+                    lifecycleScope.launch {
+                        noteId?.let {
+                            repository.update(note)
+                            binding.progressbarFormNoteFragment.visibility = View.GONE
+                            findNavController().navigate(R.id.action_formNoteFragment_to_notesListFragment)
+                        } ?: run {
+                            repository.save(note)
+                            binding.progressbarFormNoteFragment.visibility = View.GONE
+                            findNavController().navigate(R.id.action_formNoteFragment_to_notesListFragment)
+                        }
                     }
+                } ?: run {
+                    binding.progressbarFormNoteFragment.visibility = View.GONE
+                    Snackbar.make(
+                        requireView(),
+                        getString(R.string.default_error_message),
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
             }
         }
     }
 
-    private fun createNote(): Note {
+    private fun createNote(): Note? {
         binding.apply {
             val title = textinputTitleInputNoteFragment.editText!!.text.toString().trim()
-            val description =
-                textinputDescriptionInputNoteFragment.editText!!.text.toString().trim()
+            val description = getDescription()
             public = switchPublicInputNoteFragment.isChecked
+
             return if (noteId != null) {
-                Note(
-                    id = noteId!!,
-                    key = noteKey!!,
-                    image = image ?: "",
-                    user = userRepository.getUser()?.displayName.toString(),
-                    userId = userRepository.getUser()!!.uid,
-                    title = title,
-                    description = description,
-                    public = public ?: false
-                )
+                return noteKey?.let {
+                    return if (it.isNotEmpty()) {
+                        Note(
+                            id = noteId!!,
+                            key = noteKey!!,
+                            image = image ?: "",
+                            user = UserRepository.getUser()?.displayName.toString(),
+                            userId = UserRepository.getUser()!!.uid,
+                            title = title,
+                            description = description,
+                            public = public ?: false
+                        )
+                    } else {
+                        null
+                    }
+                }
             } else {
                 Note(
                     image = image ?: "",
-                    user = userRepository.getUser()?.displayName.toString(),
-                    userId = userRepository.getUser()!!.uid,
+                    user = UserRepository.getUser()?.displayName.toString(),
+                    userId = UserRepository.getUser()!!.uid,
                     title = title,
                     description = description,
                     public = public ?: false,
@@ -164,6 +199,18 @@ class FormNoteFragment : Fragment() {
             }
         }
     }
+
+    private fun getDescription(): String {
+        val descriptionEdt = binding.textinputDescriptionInputNoteFragment.editText
+        return descriptionEdt?.let { description ->
+            return if (description.text.isNotEmpty()) {
+                description.text.toString()
+            } else {
+                ""
+            }
+        } ?: ""
+    }
+
 
     private fun titleNotEmpty(): Boolean =
         binding.textinputTitleInputNoteFragment.editText!!.text.isNotEmpty()
